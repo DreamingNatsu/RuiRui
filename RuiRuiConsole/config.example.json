@@ -1,0 +1,20 @@
+{
+  "devuser": {
+    "email": "example@example.com",
+    "password": "password"
+  },
+  "botuser": {
+    "email": "example@example.com",
+    "password": "password"
+  },
+  "sshuser": {
+    "user": "username",
+    "password": "password"
+  },
+  "transmissionuser": {
+    "user": "username",
+    "password": "password"
+  },
+  "connectionstring": "Data Source=example.com\\databaseinstance;Initial Catalog=databasename;User Id=user;Password=password;MultipleActiveResultSets=true"
+  
+}

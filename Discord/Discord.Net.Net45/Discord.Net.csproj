@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8D71A857-879A-4A10-859E-5FF824ED6688}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Discord</RootNamespace>
+    <AssemblyName>Discord.Net</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <UseMSBuildEngine>False</UseMSBuildEngine>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>2</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NET45</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FullDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\FullDebug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET45,TEST_RESPONSES</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <WarningLevel>2</WarningLevel>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Optimize>false</Optimize>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="websocket-sharp, Version=1.0.2.36589, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\WebSocketSharp.1.0.3-rc9\lib\websocket-sharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Discord.Net\API\Auth.cs">
+      <Link>API\Auth.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Bans.cs">
+      <Link>API\Bans.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Channels.cs">
+      <Link>API\Channels.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Converters\LongCollectionConverter.cs">
+      <Link>API\Converters\LongCollectionConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Converters\LongStringConverter.cs">
+      <Link>API\Converters\LongStringConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Endpoints.cs">
+      <Link>API\Endpoints.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Enums\AvatarImageType.cs">
+      <Link>API\Enums\AvatarImageType.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Enums\ChannelType.cs">
+      <Link>API\Enums\ChannelType.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Enums\PermissionTarget.cs">
+      <Link>API\Enums\PermissionTarget.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Enums\Region.cs">
+      <Link>API\Enums\Region.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Enums\StringEnum.cs">
+      <Link>API\Enums\StringEnum.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Enums\UserStatus.cs">
+      <Link>API\Enums\UserStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Invites.cs">
+      <Link>API\Invites.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Maintenance.cs">
+      <Link>API\Maintenance.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Members.cs">
+      <Link>API\Members.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Messages.cs">
+      <Link>API\Messages.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Permissions.cs">
+      <Link>API\Permissions.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Presence.cs">
+      <Link>API\Presence.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Roles.cs">
+      <Link>API\Roles.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Servers.cs">
+      <Link>API\Servers.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Users.cs">
+      <Link>API\Users.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\Voice.cs">
+      <Link>API\Voice.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\API\WebSockets.cs">
+      <Link>API\WebSockets.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Audio\IDiscordVoiceBuffer.cs">
+      <Link>Audio\IDiscordVoiceBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Audio\IDiscordVoiceClient.cs">
+      <Link>Audio\IDiscordVoiceClient.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Audio\Opus.cs">
+      <Link>Audio\Opus.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Audio\OpusDecoder.cs">
+      <Link>Audio\OpusDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Audio\OpusEncoder.cs">
+      <Link>Audio\OpusEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Audio\Sodium.cs">
+      <Link>Audio\Sodium.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Audio\VoiceBuffer.cs">
+      <Link>Audio\VoiceBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordAPIClient.cs">
+      <Link>DiscordAPIClient.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordAPIClientConfig.cs">
+      <Link>DiscordAPIClientConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordClient.Channels.cs">
+      <Link>DiscordClient.Channels.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordClient.cs">
+      <Link>DiscordClient.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordClient.Invites.cs">
+      <Link>DiscordClient.Invites.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordClient.Messages.cs">
+      <Link>DiscordClient.Messages.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordClient.Permissions.cs">
+      <Link>DiscordClient.Permissions.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordClient.Roles.cs">
+      <Link>DiscordClient.Roles.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordClient.Servers.cs">
+      <Link>DiscordClient.Servers.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordClient.Users.cs">
+      <Link>DiscordClient.Users.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordClient.Voice.cs">
+      <Link>DiscordClient.Voice.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordClientConfig.cs">
+      <Link>DiscordClientConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordWSClient.cs">
+      <Link>DiscordWSClient.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordWSClient.Events.cs">
+      <Link>DiscordWSClient.Events.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordWSClient.Voice.cs">
+      <Link>DiscordWSClient.Voice.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\DiscordWSClientConfig.cs">
+      <Link>DiscordWSClientConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Helpers\AsyncCollection.cs">
+      <Link>Helpers\AsyncCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Helpers\BitHelper.cs">
+      <Link>Helpers\BitHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Helpers\CachedObject.cs">
+      <Link>Helpers\CachedObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Helpers\EpochTime.cs">
+      <Link>Helpers\EpochTime.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Helpers\Extensions.cs">
+      <Link>Helpers\Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Helpers\Format.cs">
+      <Link>Helpers\Format.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Helpers\IdConvert.cs">
+      <Link>Helpers\IdConvert.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Helpers\Mention.cs">
+      <Link>Helpers\Mention.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Helpers\Reference.cs">
+      <Link>Helpers\Reference.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Helpers\TaskHelper.cs">
+      <Link>Helpers\TaskHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\HttpException.cs">
+      <Link>HttpException.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\IService.cs">
+      <Link>IService.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Models\Channel.cs">
+      <Link>Models\Channel.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Models\Color.cs">
+      <Link>Models\Color.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Models\GlobalUser.cs">
+      <Link>Models\GlobalUser.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Models\Invite.cs">
+      <Link>Models\Invite.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Models\Message.cs">
+      <Link>Models\Message.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Models\Permissions.cs">
+      <Link>Models\Permissions.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Models\Role.cs">
+      <Link>Models\Role.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Models\Server.cs">
+      <Link>Models\Server.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Models\User.cs">
+      <Link>Models\User.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\Rest\IRestEngine.cs">
+      <Link>Net\Rest\IRestEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\Rest\RestClient.cs">
+      <Link>Net\Rest\RestClient.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\Rest\RestClient.Events.cs">
+      <Link>Net\Rest\RestClient.Events.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\Rest\SharpRestEngine.cs">
+      <Link>Net\Rest\SharpRestEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\WebSockets\DataWebSocket.cs">
+      <Link>Net\WebSockets\DataWebSocket.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\WebSockets\DataWebSockets.Events.cs">
+      <Link>Net\WebSockets\DataWebSockets.Events.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\WebSockets\IWebSocketEngine.cs">
+      <Link>Net\WebSockets\IWebSocketEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\WebSockets\VoiceWebSocket.cs">
+      <Link>Net\WebSockets\VoiceWebSocket.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\WebSockets\VoiceWebSocket.Events.cs">
+      <Link>Net\WebSockets\VoiceWebSocket.Events.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\WebSockets\WebSocket.cs">
+      <Link>Net\WebSockets\WebSocket.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\WebSockets\WebSocket.Events.cs">
+      <Link>Net\WebSockets\WebSocket.Events.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\Net\WebSockets\WebSocketSharpEngine.cs">
+      <Link>Net\WebSockets\WebSocketSharpEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Discord.Net\TimeoutException.cs">
+      <Link>TimeoutException.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Discord.Net\lib\libopus.so">
+      <Link>lib\libopus.so</Link>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Discord.Net\lib\libsodium.dll">
+      <Link>lib\libsodium.dll</Link>
+    </Content>
+    <Content Include="..\Discord.Net\lib\opus.dll">
+      <Link>lib\opus.dll</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
