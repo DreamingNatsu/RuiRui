@@ -14,7 +14,8 @@ namespace Dba.DTO.BotDTO {
     public enum EasterEggType
     {
         Equals,Contains,Regex,
-        EqualsCheckCase,ContainsCheckCase
+        EqualsCheckCase,ContainsCheckCase,
+        MultiMessage
     }
 
     public enum ResponseType

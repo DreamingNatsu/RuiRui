@@ -8,6 +8,7 @@ using Edokan.KaiZen.Colors;
 using Logic;
 using RuiRuiBot;
 using RuiRuiBot.ExtensionMethods;
+using RuiRuiConsole.Extensions;
 
 namespace RuiRuiConsole {
     internal class Program {
@@ -30,7 +31,7 @@ namespace RuiRuiConsole {
             rui.Run(async () =>
             {
                 var client = rui.GetClient();
-                client.LogMessage += (sender, eventArgs) => Console.WriteLine($"[{eventArgs.Severity}]".Red() + $"{{{eventArgs.Source.ToString()}}}".Cyan() + $": {eventArgs.Message}");
+                client.LogMessage += (sender, eventArgs) => Console.WriteLine(GetTime().Grey() + $"[{eventArgs.Severity}]".Red() + $"{{{eventArgs.Source.ToString()}}}".Cyan() + $": {eventArgs.Message}");
 
                 client.Connected += Client_Connected;
                 client.MessageReceived += (sender, eventArgs) =>
@@ -38,11 +39,11 @@ namespace RuiRuiConsole {
                     try {
                         if (Equals(eventArgs.Channel, client.GetUser(consoleClient.CurrentUser.Id).PrivateChannel) && Equals(eventArgs.User.Id, client.CurrentUserId))
                         {
-                            Console.WriteLine("[" + eventArgs.User.Name + "]: " + eventArgs.Message.Text);
+                            Console.WriteLine(GetTime().Grey() + $"[{eventArgs.User.Name}]: {eventArgs.Message.Text}");
                         }
                     }
                     catch (Exception) {
-                        Console.WriteLine("[" + eventArgs.User.Name + "]: " + eventArgs.Message.Text);
+                        Console.WriteLine(GetTime().Grey()+$"[{eventArgs.User.Name}]: {eventArgs.Message.Text}");
                     }
                     
                 };
@@ -53,7 +54,7 @@ namespace RuiRuiConsole {
                 client.GetService<CommandService>().RanCommand += Program_RanCommand;
                 client.GetService<CommandService>().CommandError += Program_CommandError;
 
-                Console.WriteLine("Input is now availabe".Green());
+                Console.WriteLine(GetTime().Grey()+"Input is now availabe".Green());
                 while (true) {
                     
                     var input = Console.ReadLine();
@@ -72,27 +73,33 @@ namespace RuiRuiConsole {
             });
         }
 
+        private static string GetTime(){
+            var d = DateTime.Now;
+            return $"[{d.Day}/{d.Month} {d.Hour.PadZero(2)}:{d.Minute.PadZero(2)}:{d.Second.PadZero(2)}]";
+        }
+
         private static void Client_Connected(object sender, EventArgs e)
         {
-            Console.WriteLine("Logged in "+((DiscordClient)sender).CurrentUser.Email);
+            Console.WriteLine(GetTime().Grey() + "Logged in " +((DiscordClient)sender).CurrentUser.Email);
         }
+
 
         private static void Program_CommandError(object sender, CommandErrorEventArgs eventArgs)
         {
             switch (eventArgs.ErrorType) {
                 case CommandErrorType.Exception:
-                    Console.WriteLine("[Error]".Red() + $"{{{eventArgs.Channel.Name}}}".Cyan() + $": {eventArgs.Message}\n"+$"Exception: {eventArgs.Exception.Message}");
+                    Console.WriteLine(GetTime().Grey() + "[Error]".Red() + $"{{{eventArgs.Channel.Name}}}".Cyan() + $": {eventArgs.Message}\n"+$"Exception: {eventArgs.Exception.Message}");
                     break;
                 case CommandErrorType.UnknownCommand:
                     break;
                 case CommandErrorType.BadPermissions:
-                    Console.WriteLine("[Warning]".Yellow() + $"{{{eventArgs.Channel.Name}}}".Cyan() + $": {eventArgs.Message}\n" + $"Command not executed: permission not high enough");
+                    Console.WriteLine(GetTime().Grey() + "[Warning]".Yellow() + $"{{{eventArgs.Channel.Name}}}".Cyan() + $": {eventArgs.Message}\n" + $"Command not executed: permission not high enough");
                     break;
                 case CommandErrorType.BadArgCount:
-                    Console.WriteLine("[Warning]".Yellow() + $"{{{eventArgs.Channel.Name}}}".Cyan() + $": {eventArgs.Message}\n" + $"Command not executed: invalid amount of arguments");
+                    Console.WriteLine(GetTime().Grey() + "[Warning]".Yellow() + $"{{{eventArgs.Channel.Name}}}".Cyan() + $": {eventArgs.Message}\n" + $"Command not executed: invalid amount of arguments");
                     break;
                 case CommandErrorType.InvalidInput:
-                    Console.WriteLine("[Warning]".Yellow() + $"{{{eventArgs.Channel.Name}}}".Cyan() + $": {eventArgs.Message}\n" + $"Command not executed: invalid input");
+                    Console.WriteLine(GetTime().Grey() + "[Warning]".Yellow() + $"{{{eventArgs.Channel.Name}}}".Cyan() + $": {eventArgs.Message}\n" + $"Command not executed: invalid input");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -100,7 +107,7 @@ namespace RuiRuiConsole {
         }
 
         private static void Program_RanCommand(object sender, CommandEventArgs eventArgs){
-            Console.WriteLine($"[Info]" + $"{{{eventArgs.Channel.Name}}}".Cyan() + $": {eventArgs.Message}");
+            Console.WriteLine(GetTime().Grey() + $"[Info]" + $"{{{eventArgs.Channel.Name}}}".Cyan() + $": {eventArgs.Message}");
         }
 
         public static async Task Login(DiscordClient client, string login, string password)
@@ -129,7 +136,7 @@ namespace RuiRuiConsole {
             }
             catch (Exception)
             {
-                Console.WriteLine("Exception occured while trying to log in console client");
+                Console.WriteLine(GetTime().Grey() + "Exception occured while trying to log in console client");
             }
         }
     }

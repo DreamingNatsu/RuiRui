@@ -137,9 +137,17 @@ namespace RuiRuiBot.Botplugins.Triggers
                     return Regex.IsMatch(message.Text, ee.Trigger);
                 case EasterEggType.ContainsCheckCase:
                     return message.Text.Contains(ee.Trigger);
+                case EasterEggType.MultiMessage:
+                    return CheckMultiMessageTrigger(ee, message);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private static bool CheckMultiMessageTrigger(EasterEgg ee, Message message){
+            var checkmessages = ee.Trigger.Split(new[]{"%;"},StringSplitOptions.None).OrderBy(_ => _).ToArray();
+            var cached = message.Channel.Messages.OrderByDescending(m=>m.Timestamp).Take(checkmessages.Length).Select(t=>t.Text).OrderBy(_=>_).ToArray();
+            return checkmessages.SequenceEqual(cached);
         }
     }
 
