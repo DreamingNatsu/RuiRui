@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2E3F7784-9A45-4610-B855-B8492A01C577}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RuiRuiBot</RootNamespace>
+    <AssemblyName>RuiRuiBot</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleasePublish|AnyCPU'">
+    <OutputPath>bin\ReleasePublish\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DuckDuckGo, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DuckDuckGo.Net.1.0.1\lib\DuckDuckGo.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Analyzers, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.Analyzers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Analyzers.Setup, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.Analyzers.Setup.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Analyzers, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.CSharp.Analyzers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Features, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.CSharp.Features.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.FxCopAnalyzers, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.CSharp.FxCopAnalyzers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces.Desktop, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.CSharp.Workspaces.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Desktop, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.EditorFeatures.Minimal, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.EditorFeatures.Minimal.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.EditorFeatures.Text, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.EditorFeatures.Text.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Features, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.Features.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.FxCopAnalyzers, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.FxCopAnalyzers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Scripting, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.Scripting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Scripting.CSharp, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.Scripting.CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Workspaces, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Workspaces.Desktop, Version=42.42.42.42, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="NAudio, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.7.3\lib\net35\NAudio.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\DuckDuckGo.Net.1.0.1\lib\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.2.0-rc2-23623\lib\dotnet5.1\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Composition.AttributedModel, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\System.Composition.AttributedModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Convention, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\System.Composition.Convention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Hosting, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\System.Composition.Hosting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Runtime, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\System.Composition.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.TypedParts, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shaman.Roslyn.1.0.0\lib\net45\System.Composition.TypedParts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Reflection, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.4.1.0-beta-23516\lib\net46\System.Reflection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.2.0-rc2-23623\lib\dotnet5.2\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Botplugins\Information\InformationCommands.cs" />
+    <Compile Include="Botplugins\Logs\LogModule.cs" />
+    <Compile Include="Botplugins\Audio\SbCommands.cs" />
+    <Compile Include="Botplugins\Tools\BasicCommands.cs" />
+    <Compile Include="Botplugins\Tools\BotBanTools.cs" />
+    <Compile Include="Botplugins\Tools\BotChatTools.cs" />
+    <Compile Include="Botplugins\Information\Github.cs" />
+    <Compile Include="Botplugins\Tools\Eval.cs" />
+    <Compile Include="Botplugins\Useless\IsPlaying.cs" />
+    <Compile Include="ExtensionMethods\ParamNames.cs" />
+    <Compile Include="Services\ConsoleService.cs" />
+    <Compile Include="Botplugins\Tools\DateCommands.cs" />
+    <Compile Include="Botplugins\Tools\Info.cs" />
+    <Compile Include="Botplugins\Tools\Runtime.cs" />
+    <Compile Include="Botplugins\Tools\TestTools.cs" />
+    <Compile Include="Botplugins\Tools\Updater.cs" />
+    <Compile Include="Botplugins\PersonalTools\WakeOnLan.cs" />
+    <Compile Include="Botplugins\Triggers\AlertsOnTrigger.cs" />
+    <Compile Include="Botplugins\Useless\EasterEggs.cs" />
+    <Compile Include="Botplugins\Useless\FapCountCommand.cs" />
+    <Compile Include="Botplugins\Information\HelpCommands.cs" />
+    <Compile Include="Botplugins\Triggers\IgnoreList.cs" />
+    <Compile Include="Botplugins\Tools\PluginSelector.cs" />
+    <Compile Include="Botplugins\Useless\Rainbow.cs" />
+    <Compile Include="Botplugins\Useless\RandomGenerators.cs" />
+    <Compile Include="Botplugins\Useless\ReactionMacros.cs" />
+    <Compile Include="Botplugins\Information\TsCommands.cs" />
+    <Compile Include="ExtensionMethods\ClientExceptionExtensions.cs" />
+    <Compile Include="ExtensionMethods\ClientExtensions.cs" />
+    <Compile Include="ExtensionMethods\CommandBuilderExtension.cs" />
+    <Compile Include="ExtensionMethods\DbExtensionMethods\DatabaseCommandBuilderExtensions.cs" />
+    <Compile Include="ExtensionMethods\HelpExtension.cs" />
+    <Compile Include="ExtensionMethods\ListTools.cs" />
+    <Compile Include="ExtensionMethods\PrivateTextToolExtension.cs" />
+    <Compile Include="ExtensionMethods\TextToolExtensions.cs" />
+    <Compile Include="ExtensionMethods\ModuleExtensions.cs" />
+    <Compile Include="RuiRui\Roles.cs" />
+    <Compile Include="RuiRui\RuiRui.cs" />
+    <Compile Include="Botplugins\PersonalTools\TransmissionCommands.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RuiRui\RuiRuiConfig.cs" />
+    <Compile Include="RuiRui\RuiRuiExceptions.cs" />
+    <Compile Include="Services\DbCacheService.cs" />
+    <Compile Include="Services\AbstractModuleService.cs" />
+    <Compile Include="Services\PluginInvokerService.cs" />
+    <Compile Include="RuiRui\RuiRuiFuncs.cs" />
+    <Compile Include="Services\HttpService.cs" />
+    <Compile Include="Services\ServiceClientExtensions.cs" />
+    <Compile Include="Services\SettingServices.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LogicProjects\Dba\Dba.csproj">
+      <Project>{449dcf19-4a25-4a2e-a33b-df38256110a3}</Project>
+      <Name>Dba</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogicProjects\Logic\Logic.csproj">
+      <Project>{c9c26c8a-7878-4d3a-abcf-b13340a5dfb2}</Project>
+      <Name>Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Transmission-RPC-API-CSharp-master\Transmission.API.RPC\Transmission.csproj">
+      <Project>{3d33f97f-993a-4c48-acde-43f18ea7341e}</Project>
+      <Name>Transmission</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Gobius\Source\Repos\Discord.Net\Discord.Net\src\Discord.Net.Audio.Net45\Discord.Net.Audio.csproj">
+      <Project>{7bfef748-b934-4621-9b11-6302e3a9f6b3}</Project>
+      <Name>Discord.Net.Audio</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Gobius\Source\Repos\Discord.Net\Discord.Net\src\Discord.Net.Commands.Net45\Discord.Net.Commands.csproj">
+      <Project>{1b5603b4-6f8f-4289-b945-7baae523d740}</Project>
+      <Name>Discord.Net.Commands</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Gobius\Source\Repos\Discord.Net\Discord.Net\src\Discord.Net.Modules.Net45\Discord.Net.Modules.csproj">
+      <Project>{3091164f-66ae-4543-a63d-167c1116241d}</Project>
+      <Name>Discord.Net.Modules</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Gobius\Source\Repos\Discord.Net\Discord.Net\src\Discord.Net.Net45\Discord.Net.csproj">
+      <Project>{8D71A857-879A-4A10-859E-5FF824ED6688}</Project>
+      <Name>Discord.Net</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

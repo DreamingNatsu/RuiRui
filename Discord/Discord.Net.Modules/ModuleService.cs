@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Discord.Commands.Permissions;
 
 namespace Discord.Modules
 {
@@ -9,15 +11,22 @@ namespace Discord.Modules
 
 		//ModuleServiceConfig Config { get; }
 		public IEnumerable<ModuleManager> Modules => _modules.Values;
-		private readonly Dictionary<IModule, ModuleManager> _modules;
+	    public IEnumerable<IPermissionChecker> Checks { get; private set; }
 
-		public ModuleService(/*ModuleServiceConfig config*/)
-		{
-			//Config = config;
+	    private readonly Dictionary<IModule, ModuleManager> _modules;
+
+		public ModuleService(IEnumerable<IPermissionChecker> checks /*ModuleServiceConfig config*/){
+		    Checks = checks;
+		    //Config = config;
 			_modules = new Dictionary<IModule, ModuleManager>();
 		}
 
-		void IService.Install(DiscordClient client)
+        public ModuleService(){
+            Checks = new List<IPermissionChecker>();
+            _modules = new Dictionary<IModule, ModuleManager>();
+        }
+
+        void IService.Install(DiscordClient client)
 		{
 			_client = client;
         }

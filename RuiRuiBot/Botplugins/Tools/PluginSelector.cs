@@ -7,6 +7,8 @@ using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
+using RuiRuiBot.RuiRui;
+using RuiRuiBot.Services;
 
 namespace RuiRuiBot.Botplugins.Tools {
     [LockedPlugin]
@@ -19,8 +21,8 @@ namespace RuiRuiBot.Botplugins.Tools {
 
         public void Install(ModuleManager manager)
         {
-            if (manager.Client.GetService<PluginInvokerService>() == null) throw new InvalidOperationException("PluginInvokerService needs to be added to the client first before using the PluginSelector commands.");
-            _pluginInvokerService = manager.Client.GetService<PluginInvokerService>();
+            if (manager.Client.Services.Get<PluginInvokerService>() == null) throw new InvalidOperationException("PluginInvokerService needs to be added to the client first before using the PluginSelector commands.");
+            _pluginInvokerService = manager.Client.Services.Get<PluginInvokerService>();
             _client = manager.Client;
 
 
@@ -113,15 +115,15 @@ namespace RuiRuiBot.Botplugins.Tools {
             });
         }
 
-        private string GetChannelText(IEnumerable<long> bpl, CommandEventArgs m){
+        private string GetChannelText(IEnumerable<ulong> bpl, CommandEventArgs m){
             var x = bpl.Select(c =>{
                 var channel = _client.GetChannel(c);
                 if (channel.IsPrivate) {
                     return $"<pvt:{c}>";
                 }
 
-                if (m.Server!=null && m.Server.Channels.Contains(channel))
-                    return Mention.Channel(channel);
+                if (m.Server != null && m.Server.TextChannels.Contains(channel))
+                    return channel.Mention;
                 return channel.Server.Name + "#" + channel.Name;
             });
             return x.Aggregate((s1, s2) => s1 + " " + s2);

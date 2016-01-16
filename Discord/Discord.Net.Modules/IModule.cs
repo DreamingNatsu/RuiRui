@@ -3,5 +3,5 @@
     public interface IModule
 	{
 		void Install(ModuleManager manager);
-	}
+    }
 }

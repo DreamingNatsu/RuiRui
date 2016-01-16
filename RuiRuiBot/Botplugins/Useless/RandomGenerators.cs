@@ -4,7 +4,6 @@ using Discord;
 using Discord.Commands;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
-using WebGrease.Css.Extensions;
 
 namespace RuiRuiBot.Botplugins.Useless
 {
@@ -36,16 +35,16 @@ namespace RuiRuiBot.Botplugins.Useless
                 };
 
                 bot.CreateCommand("roll")
-                    .Help("With this you can roll dice", "{xdx where x are numbers}")
+                    .Description("With this you can roll dice")
                     .Parameter("roll").Do(roll);
 
                 
                 bot.CreateCommand("pickuser").Alias("randomuser")
-                    .Help("I will return a random online user").Do(args =>
+                    .Description("I will return a random online user").Do(args =>
                 {
                     var users =
-                        args.Server.Members.Where(
-                            m => !(m.Status == UserStatus.Offline) && m.Id != manager.Client.CurrentUserId).ToArray();
+                        args.Server.Users.Where(
+                            m => !(m.Status == UserStatus.Offline) && m.Id != manager.Client.CurrentUser.Id).ToArray();
                     var v = new Random().Next(users.Length);
                     return $"{users[v].Name}";
                 });
@@ -54,15 +53,14 @@ namespace RuiRuiBot.Botplugins.Useless
                     .Parameter("choice 1")
                     .Parameter("choice 2")
                     .Parameter("choice n", ParameterType.Multiple)
-                    .Help("I will make your life easier by making your difficult descisions for you.",
-                        "{choice 1} {choice 2} [choice 3] ... [choice n]").Do(args =>
+                    .Description("I will make your life easier by making your difficult descisions for you.").Do(args =>
                         {
                             var v = new Random().Next(args.Args.Length);
                             return $"I picked \"{args.Args[v]}\" for you.";
                         });
 
                 bot.CreateCommand("8ball").Alias("eightball").Alias("magicaleightball").Alias("magical8ball")
-                    .Help("I will answer your life's yes and no questions").Do(args =>
+                    .Description("I will answer your life's yes and no questions").Do(args =>
                     {
                         var items = new[]
                         {

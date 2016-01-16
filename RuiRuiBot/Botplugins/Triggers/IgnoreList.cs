@@ -9,6 +9,8 @@ using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
 using RuiRuiBot.ExtensionMethods.DbExtensionMethods;
+using RuiRuiBot.RuiRui;
+using RuiRuiBot.Services;
 
 namespace RuiRuiBot.Botplugins.Triggers {
     [LockedPlugin]
@@ -18,10 +20,11 @@ namespace RuiRuiBot.Botplugins.Triggers {
 
         private static bool ToggleIgnore(User user, DbCtx db){
             lock (List) {
-                var ignore = db.UserIgnores.FirstOrDefault(u => u.UserId == user.Id.ToString());
+                var id = user.Id.ToString();
+                var ignore = db.UserIgnores.FirstOrDefault(u => u.UserId == id);
                 var adding = ignore == null;
                 if (adding) {
-                    db.UserIgnores.Add(new UserIgnore{UserId = user.Id.ToString()});
+                    db.UserIgnores.Add(new UserIgnore{UserId = id});
                 }
                 else {
                     db.UserIgnores.Remove(ignore);
@@ -33,7 +36,8 @@ namespace RuiRuiBot.Botplugins.Triggers {
         }
 
         public static bool IsIgnored(User u){
-            return List.Any(i => i.UserId == u.Id.ToString());
+            var id = u.Id.ToString();
+            return List.Any(i => i.UserId == id);
         }
 
         public void Install(ModuleManager manager)
@@ -44,7 +48,7 @@ namespace RuiRuiBot.Botplugins.Triggers {
                 List = db.UserIgnores.ToList();
             }
             Action<CommandEventArgs, DbCtx> ignore = async (m, db) => {
-                var user = _client.FindUsers(m.Server, m.Args[0]).FirstOrDefault();
+                var user = m.Server.FindUsers(m.Args[0]).FirstOrDefault();
                 if (user == null)
                 {
                     await _client.SendBigMessage(m.Channel, "I couldn't find that user");
@@ -61,12 +65,12 @@ namespace RuiRuiBot.Botplugins.Triggers {
             {
                 bot.CreateCommand("ignore")
                 .Parameter("user")
-                .Help("I won't trigger on the specified user, commands will still work though.", usage: "{username}")
+                .Description("I won't trigger on the specified user, commands will still work though.")
                 .MinPermissions((int)Roles.Triumvirate)
                 .Do(ignore);
 
                 bot.CreateCommand("ignoreme")
-                .Help("I won't trigger on certain things anymore, sorry ;-;, commands will still work though.")
+                .Description("I won't trigger on certain things anymore, sorry ;-;, commands will still work though.")
                 .Do(ignoreme);
             });
             

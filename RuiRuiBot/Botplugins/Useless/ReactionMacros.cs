@@ -8,7 +8,7 @@ using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
 using RuiRuiBot.ExtensionMethods.DbExtensionMethods;
-using WebGrease.Css.Extensions;
+using RuiRuiBot.RuiRui;
 
 namespace RuiRuiBot.Botplugins.Useless {
     public class ReactionMacros : IModule
@@ -28,7 +28,7 @@ namespace RuiRuiBot.Botplugins.Useless {
         private void CreateMacroTypeCreationCommand(CommandGroupBuilder bot){
             bot.CreateCommand("createmacro")
                 .MinPermissions((int)Roles.Triumvirate)
-                .Help("Create a macro type ,usage: {command} {command help description}")
+                .Description("Create a macro type ,usage: {command} {command help description}")
                 .Parameter("name").Parameter("helpmessage")
                 .Do((m, db) =>{
                     var rmt = new ReactionMacroType{Description = m.Args[1], Type = m.Args[0]};
@@ -38,7 +38,7 @@ namespace RuiRuiBot.Botplugins.Useless {
                     return (rmt.Type + " macro type created.");
                 });
             bot.CreateCommand("macrolist")
-                .Help("I will list all the defined macro lists")
+                .Description("I will list all the defined macro lists")
                 .Do((m, db) =>
                 {
                     var ret = new List<string> {"These are all the reaction macro functions"};
@@ -92,19 +92,19 @@ namespace RuiRuiBot.Botplugins.Useless {
             lock (bot.Service.AllCommands) {
                 
                 bot.CreateCommand(rmt.Type)
-                    .Help(rmt.Description)
+                    .Description(rmt.Description)
                     .Parameter("tag",ParameterType.Optional)
                     .Do(command);
                 bot.CreateCommand("list" + rmt.Type)
-                    .Help("lists all the entries in the "+rmt.Type+" list")
+                    .Description("lists all the entries in the "+rmt.Type+" list")
                     .MinPermissions((int)Roles.Triumvirate)
                     .Do(listcommand);
                 bot.CreateCommand("add" + rmt.Type)
-                    .Help("adds an image to the " + rmt.Type + " list")
+                    .Description("adds an image to the " + rmt.Type + " list")
                     .Parameter("link")
                     .Parameter("tag",ParameterType.Optional).Do(addcommand);
                 bot.CreateCommand("del" + rmt.Type)
-                    .Help("removes an image from the " + rmt.Type + " list")
+                    .Description("removes an image from the " + rmt.Type + " list")
                     .Parameter("link").Do(delcommand);
             }
         }

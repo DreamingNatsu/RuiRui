@@ -1,11 +1,11 @@
-﻿using Discord.Commands;
-using WebGrease.Css.Extensions;
+﻿using System;
+using Discord.Commands;
 
 namespace RuiRuiBot.ExtensionMethods
 {
     public static class HelpExtension
     {
-
+        [Obsolete("Use Description() instead")]
         public static CommandBuilder Help(this CommandBuilder commandBuilder, string description,string usage = "",bool hidden = false)
         {
             if (hidden)

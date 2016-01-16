@@ -13,20 +13,17 @@ namespace RuiRuiBot.Botplugins.Tools {
             manager.CreateCommands(b =>
             {
                 b.Category("tools");
-
                 b.CreateCommand("getdate").Alias("date")
-                .Help("I'll say the date")
+                .Description("I'll say the date")
                 .Do(m => { return DateTime.Now.ToLongTimeString(); });
-
                 b.CreateCommand("lastseen").Parameter("username",ParameterType.Unparsed).Do(m =>
                 {
-                    var user = m.Channel.Members.FirstOrDefault(u => u.Name == m.GetArg("username"));
+                    var user = m.Channel.Users.FirstOrDefault(u => u.Name == m.GetArg("username"));
                     return user?.LastOnlineAt.ToString() ?? "can't find that user";
                 });
-
                 b.CreateCommand("lastactivity").Parameter("username", ParameterType.Unparsed).Do(m =>
                 {
-                    var user = m.Channel.Members.FirstOrDefault(u => u.Name == m.GetArg("username"));
+                    var user = m.Channel.Users.FirstOrDefault(u => u.Name == m.GetArg("username"));
                     return user?.LastActivityAt.ToString() ?? "can't find that user";
                 });
             });

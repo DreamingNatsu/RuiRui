@@ -1,8 +1,6 @@
 ﻿using Discord;
-using Discord.Commands;
 using Discord.Modules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RuiRuiBot;
 using RuiRuiBot.Botplugins.Tools;
 using RuiRuiBot.ExtensionMethods;
 
@@ -24,7 +22,7 @@ namespace RuiRuiTests
             string text = $"test_{Random.Next()}";
             AssertEvent<MessageEventArgs>(
             "MessageCreated event never received",
-            () => HostClient.SendMessage(TestServerChannel, text),
+            () => TestServerChannel.SendMessage(text),
             x => ObserverBot.MessageReceived += x,
             x => ObserverBot.MessageReceived -= x,
             (s, e) => e.Message.Text == text);

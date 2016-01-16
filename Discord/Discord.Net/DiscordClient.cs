@@ -289,7 +289,7 @@ namespace Discord
 				serviceT = service as T;
 
 			if (serviceT == null && required)
-				throw new InvalidOperationException($"This operation requires {nameof(T)} to be added to {nameof(DiscordClient)}.");
+				throw new InvalidOperationException($"This operation requires {typeof(T)} to be added to {nameof(DiscordClient)}.");
 			return serviceT;
         }
 

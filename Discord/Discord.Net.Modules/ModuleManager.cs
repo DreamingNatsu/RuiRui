@@ -110,6 +110,11 @@ namespace Discord.Modules
 			client.UserUnbanned += (s, e) => { if (UserUnbanned != null && HasIndirectServer(e.Server)) UserUnbanned(s, e); };
 		}
 
+        public void CreateCommands(Func<object, object> p)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetFilterType(FilterType filterType){
             lock (this) {
                 _filterType = filterType;
@@ -128,6 +133,9 @@ namespace Discord.Modules
 			{
 				x.Category(_name);
 				x.AddCheck(new ModuleChecker(this));
+			    foreach (var check in _client.GetService<ModuleService>().Checks) {
+			        x.AddCheck(check);
+			    }
 				config(x);
             });
 

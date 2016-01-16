@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord.Commands;
+using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
+using RuiRuiBot.RuiRui;
 
 namespace RuiRuiBot.ExtensionMethods
 {
     public static class CommandBuilderExtension
     {
+
+
         public static void CreateCommands(this ModuleManager cgb, Action<CommandGroupBuilder> action)
         {
             cgb.CreateCommands("",action);
         }
-
-        public static CommandBuilder CreateCommand(this ModuleManager modman, string cmd){
-           return modman.Client.GetService<CommandService>().CreateCommand(cmd).AddCheck(new ModuleChecker(modman));
-        }
-
-
 
         public static void Do<T>(this CommandBuilder command, Action<CommandEventArgs, T> action) where T : IDisposable, new()
         {
@@ -266,6 +264,17 @@ namespace RuiRuiBot.ExtensionMethods
                 }
             };
             cb.Do(d);
+        }
+
+
+        public static CommandBuilder MinPermissions(this CommandBuilder cb, Roles r){
+            cb.MinPermissions((int) r);
+            return cb;
+        }
+        public static CommandGroupBuilder MinPermissions(this CommandGroupBuilder cb, Roles r)
+        {
+            cb.MinPermissions((int) r);
+            return cb;
         }
     }
     

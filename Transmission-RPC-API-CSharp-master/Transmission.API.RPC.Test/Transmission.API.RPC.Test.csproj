@@ -54,9 +54,9 @@
     <Compile Include="MethodsTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Transmission.API.RPC\Transmission.API.RPC.csproj">
+    <ProjectReference Include="..\Transmission.API.RPC\Transmission.csproj">
       <Project>{3d33f97f-993a-4c48-acde-43f18ea7341e}</Project>
-      <Name>Transmission.API.RPC</Name>
+      <Name>Transmission</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

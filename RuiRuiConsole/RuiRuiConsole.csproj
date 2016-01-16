@@ -9,9 +9,25 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RuiRuiConsole</RootNamespace>
     <AssemblyName>RuiRuiConsole</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -22,6 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,8 +73,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompositeOutput.cs" />
+    <Compile Include="ConsoleOutput.cs" />
     <Compile Include="Extensions\Colors.cs" />
     <Compile Include="Extensions\Others.cs" />
+    <Compile Include="IOutput.cs" />
+    <Compile Include="LogfileOutput.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
@@ -65,39 +86,48 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="config.example.json" />
+    <None Include="config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dba\Dba.csproj">
-      <Project>{9e927b11-5971-489c-8af3-970366c9ea10}</Project>
+    <ProjectReference Include="..\LogicProjects\Dba\Dba.csproj">
+      <Project>{449dcf19-4a25-4a2e-a33b-df38256110a3}</Project>
       <Name>Dba</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Discord\Discord.Net.Commands.Net45\Discord.Net.Commands.csproj">
+    <ProjectReference Include="..\LogicProjects\Logic\Logic.csproj">
+      <Project>{c9c26c8a-7878-4d3a-abcf-b13340a5dfb2}</Project>
+      <Name>Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RuiRuiBot\RuiRuiBot.csproj">
+      <Project>{2E3F7784-9A45-4610-B855-B8492A01C577}</Project>
+      <Name>RuiRuiBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Gobius\Source\Repos\Discord.Net\Discord.Net\src\Discord.Net.Commands.Net45\Discord.Net.Commands.csproj">
       <Project>{1b5603b4-6f8f-4289-b945-7baae523d740}</Project>
       <Name>Discord.Net.Commands</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Discord\Discord.Net.Modules.Net45\Discord.Net.Modules.csproj">
-      <Project>{3091164f-66ae-4543-a63d-167c1116241d}</Project>
+    <ProjectReference Include="C:\Users\Gobius\Source\Repos\Discord.Net\Discord.Net\src\Discord.Net.Modules.Net45\Discord.Net.Modules.csproj">
+      <Project>{3091164F-66AE-4543-A63D-167C1116241D}</Project>
       <Name>Discord.Net.Modules</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Discord\Discord.Net.Net45\Discord.Net.csproj">
+    <ProjectReference Include="C:\Users\Gobius\Source\Repos\Discord.Net\Discord.Net\src\Discord.Net.Net45\Discord.Net.csproj">
       <Project>{8d71a857-879a-4a10-859e-5ff824ed6688}</Project>
       <Name>Discord.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Logic\Logic.csproj">
-      <Project>{2c0ae537-0214-4d19-b4ce-778c09f5d990}</Project>
-      <Name>Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RuiRuiBot\RuiRui.csproj">
-      <Project>{2E3F7784-9A45-4610-B855-B8492A01C577}</Project>
-      <Name>RuiRui</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Transmission-RPC-API-CSharp-master\Transmission.API.RPC\Transmission.API.RPC.csproj">
-      <Project>{3d33f97f-993a-4c48-acde-43f18ea7341e}</Project>
-      <Name>Transmission.API.RPC</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName) == Release xcopy /i /e /s /y /f "$(ProjectDir)\$(OutDir)\*" "X:\Rui\temp"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

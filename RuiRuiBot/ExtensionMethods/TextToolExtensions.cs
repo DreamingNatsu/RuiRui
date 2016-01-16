@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using WebGrease.Css.Extensions;
 
 namespace RuiRuiBot.ExtensionMethods
 {
@@ -22,11 +21,11 @@ namespace RuiRuiBot.ExtensionMethods
                 {
                     if (isTts)
                     {
-                        await client.SendTTSMessage(channel, new string(message.Take(maxlength).ToArray()));
+                        await channel.SendTTSMessage(new string(message.Take(maxlength).ToArray()));
                     }
                     else
                     {
-                        await client.SendMessage(channel, new string(message.Take(maxlength).ToArray()));  
+                        await channel.SendMessage(new string(message.Take(maxlength).ToArray()));  
                     }
                     
 
@@ -34,27 +33,31 @@ namespace RuiRuiBot.ExtensionMethods
                     continue;
                 }
                 if (isTts)
-                    await client.SendTTSMessage(channel, message);
+                    await channel.SendTTSMessage(message);
                 else
-                    await client.SendMessage(channel, message);
+                    await channel.SendMessage(message);
 
                 break;
             }
         }
-        public static async Task SendBigMessage(this DiscordClient client, User channel, string message)
+        public static async Task SendBigMessage(this DiscordClient client, User user, string message)
         {
             while (true)
             {
                 if (message.Length > Maxlength)
                 {
-                    await client.SendPrivateMessage(channel, new string(message.Take(Maxlength).ToArray()));
+                    await user.SendMessage( new string(message.Take(Maxlength).ToArray()));
                     message = new string(message.Skip(Maxlength).ToArray());
                     continue;
                 }
-                await client.SendPrivateMessage(channel, message);
+                await user.SendMessage( message);
                 break;
             }
         }
+
+
+
+
         public static async Task SendBigMessage(this DiscordClient client, Channel channel, IEnumerable<string> message,bool isTts = false)
         {
             var enumerable = message as IList<string> ?? message.ToList();

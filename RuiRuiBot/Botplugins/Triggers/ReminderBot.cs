@@ -6,7 +6,6 @@ using Dba.DTO.BotDTO;
 using Discord;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
-using WebGrease.Css.Extensions;
 
 namespace RuiRuiBot.Botplugins.Triggers {
     public class ReminderBot : IModule {
@@ -35,9 +34,9 @@ namespace RuiRuiBot.Botplugins.Triggers {
                             && r.UserId == m.User.Id.ToString()
                             //&& r.ChannelId == m.ChannelId
                             ).ForEach(async r =>{
-                                var channel = Client.GetChannel(long.Parse(r.ChannelId));
-                                var user = Client.GetUser(m.Server, long.Parse(r.UserId));
-                                var creator = Client.GetUser(m.Server, long.Parse(r.CreatorId));
+                                var channel = Client.GetChannel(ulong.Parse(r.ChannelId));
+                                var user = m.Server.GetUser(ulong.Parse(r.UserId));
+                                var creator = m.Server.GetUser(ulong.Parse(r.CreatorId));
                                 var creatorname = user.Id == creator.Id ? "you" : creator.Name;
                                 var username = user.Name;
                                 var message = "@" + username + ", " + creatorname + " wanted me to remind you " +
@@ -79,7 +78,7 @@ namespace RuiRuiBot.Botplugins.Triggers {
                     if (name == "me")
                         reminder.UserId = m.User.Id.ToString();
                     else {
-                        var d = ((DiscordClient) s).GetServer(m.Server.Id).Members.FirstOrDefault(u => u.Name == name);
+                        var d = ((DiscordClient) s).GetServer(m.Server.Id).Users.FirstOrDefault(u => u.Name == name);
                         if (d != null) {
                             reminder.UserId = d.Id.ToString();
                             reminder.ChannelId = m.Channel.IsPrivate ? d.PrivateChannel.Id.ToString() : m.Channel.Id.ToString();

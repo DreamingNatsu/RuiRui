@@ -14,17 +14,17 @@ namespace RuiRuiBot.Botplugins.Useless {
         public void Init(ModuleManager manager){
             manager.CreateCommands(bot =>
             {
-                bot.CreateCommand("fapstat").Alias("schlickstat").Help("I will display the masturbation stats of everyone").Do(async (m, d) =>
+                bot.CreateCommand("fapstat").Alias("schlickstat").Description("I will display the masturbation stats of everyone").Do(async (m, d) =>
                     await _client.SendBigMessage(m.Channel,
                         "These are the masturbation statistics:\n" + d.Fapcounts
                             .OrderByDescending(f => f.Count)
                             .ToList()
                             .Select(
                                 (f, i) =>
-                                    (i + 1) + ") " + _client.GetUser(m.Server, long.Parse(f.User))?.Name + ": " + f.Count + "\n")
+                                    (i + 1) + ") " + m.Server.GetUser(ulong.Parse(f.User))?.Name + ": " + f.Count + "\n")
                             .Aggregate((c, n) => c + n)));
             bot.CreateCommand("ifapped").Alias("ischlicked")
-                .Help("I will keep track of how many times you pleased yourself, because my creator is a baka hentai.")
+                .Description("will keep track of how many times you pleased yourself, because my creator is a baka hentai.")
                 .Do(async (m, db) =>{
                     long counter = 0;
 

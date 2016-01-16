@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.Commands.Permissions.Levels;
+using Discord.Legacy;
 using Discord.Modules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RuiRuiBot;
@@ -31,12 +31,12 @@ namespace RuiRuiTests
 
             HostClient = new DiscordClient();
             TargetBot = new DiscordClient();
-            var commandService = new CommandService(new CommandServiceConfig() { CommandChar = '/', HelpMode = HelpMode.Private });
+            var commandService = new CommandService(new CommandServiceConfig { CommandChar = '/', HelpMode = HelpMode.Private });
             var moduleService = new ModuleService();
             var pluginInvokerService = new PluginInvokerService(modules);
-            TargetBot.AddService(commandService);
-            TargetBot.AddService(moduleService);
-            TargetBot.AddService(pluginInvokerService);
+            TargetBot.Services.Add(commandService);
+            TargetBot.Services.Add(moduleService);
+            TargetBot.Services.Add(pluginInvokerService);
             ObserverBot = new DiscordClient();
 
             HostClient.Connect(settings.User1.Email, settings.User1.Password).Wait();
@@ -45,13 +45,14 @@ namespace RuiRuiTests
 
             //Cleanup existing servers
             WaitMany(
-                HostClient.AllServers.Select(x => HostClient.LeaveServer(x)),
-                TargetBot.AllServers.Select(x => TargetBot.LeaveServer(x)),
-                ObserverBot.AllServers.Select(x => ObserverBot.LeaveServer(x)));
+                HostClient.Servers.Select(x => x.Leave()),
+                TargetBot.Servers.Select(x => x.Leave()),
+                ObserverBot.Servers.Select(x => x.Leave()));
 
             //Create new server and invite the other bots to it
-            TestServer = HostClient.CreateServer("Discord.Net Testing", Region.USEast).Result;
+            TestServer = HostClient.CreateServer("Discord.Net Testing", HostClient.Regions.First()).Result;
             TestServerChannel = TestServer.DefaultChannel;
+#pragma warning disable CS0618 // Type or member is obsolete
             Invite invite = HostClient.CreateInvite(TestServer, 60, 1, false, false).Result;
             WaitAll(
                 TargetBot.AcceptInvite(invite),
@@ -61,9 +62,9 @@ namespace RuiRuiTests
         public static void Cleanup()
         {
             WaitMany(
-                HostClient.State == DiscordClientState.Connected ? HostClient.AllServers.Select(x => HostClient.LeaveServer(x)) : null,
-                TargetBot.State == DiscordClientState.Connected ? TargetBot.AllServers.Select(x => TargetBot.LeaveServer(x)) : null,
-                ObserverBot.State == DiscordClientState.Connected ? ObserverBot.AllServers.Select(x => ObserverBot.LeaveServer(x)) : null);
+                HostClient.State == ConnectionState.Connected ? HostClient.Servers.Select(x => HostClient.LeaveServer(x)) : null,
+                TargetBot.State == ConnectionState.Connected ? TargetBot.Servers.Select(x => TargetBot.LeaveServer(x)) : null,
+                ObserverBot.State == ConnectionState.Connected ? ObserverBot.Servers.Select(x => ObserverBot.LeaveServer(x)) : null);
 
             WaitAll(
                 HostClient.Disconnect(),

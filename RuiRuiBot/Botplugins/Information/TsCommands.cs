@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using Discord.Commands;
 using Discord.Modules;
 using Newtonsoft.Json;
 using RuiRuiBot.ExtensionMethods;
@@ -16,8 +15,8 @@ namespace RuiRuiBot.Botplugins.Information {
             manager.CreateCommands(bot =>{
                 bot.CreateCommand("ts")
                     .Alias("teamspeak")
-                    .Help("I will tell you who is in the TeamSpeak server at this moment")
-                    .Do(async delegate(CommandEventArgs args){
+                    .Description("I will tell you who is in the TeamSpeak server at this moment")
+                    .Do(async delegate{
                         using (var webclient = new HttpClient()) {
                             webclient.DefaultRequestHeaders.Accept.Clear();
                             var json = await webclient.GetStringAsync("http://aaa.dolha.in/api.php");

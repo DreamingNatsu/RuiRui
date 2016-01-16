@@ -1,63 +1,82 @@
-﻿using System.Reflection;
+﻿using System.Dynamic;
+using System.Linq;
+using System.Reflection;
 using Discord;
 using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.CodeAnalysis.Scripting.CSharp;
+using Microsoft.CSharp.RuntimeBinder;
 using RuiRuiBot.ExtensionMethods;
+using RuiRuiBot.RuiRui;
 
-
-namespace RuiRuiBot.Botplugins.Tools
-{
-    class Eval : IModule
-    {
-        
-
-        public void Install(ModuleManager manager)
-        {
-            manager.CreateCommands("", cfg =>
-            {
-                
+namespace RuiRuiBot.Botplugins.Tools {
+    public class Eval : IModule {
+        public void Install(ModuleManager manager){
+            manager.CreateCommands("", cfg =>{
                 cfg.CreateCommand("eval")
-                .Parameter("code", ParameterType.Unparsed)
-                .MinPermissions((int)Roles.Owner)
-                .Do(e =>
-                {
-                    var options = ScriptOptions.Default
-                        .AddReferences(
-                                            Assembly.GetAssembly(typeof(System.Dynamic.DynamicObject)),  // System.Code
-                            Assembly.GetAssembly(typeof(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo)),  // Microsoft.CSharp
-                            Assembly.GetAssembly(typeof(System.Dynamic.ExpandoObject)),
-                            Assembly.GetAssembly(typeof(DiscordClient)), 
-                            Assembly.GetAssembly(typeof(CommandEventArgs)), 
-                            Assembly.GetAssembly(typeof(ModuleManager)),
-                            Assembly.GetAssembly(typeof(CommandBuilderExtension)),
-                            Assembly.GetAssembly(typeof(ParameterType))
-                            
-                            )  // System.Dynamic
-                        .AddNamespaces("System.Dynamic")
-                        
-                        ;
-                    var client = cfg.Service.Client;
-                    var result = CSharpScript.Eval(e.Args[0],options,new Globals{client = client,e=e,cfg=cfg,manager=manager});
-                    cfg.CreateCommand("spam").Parameter("string").Do(m =>{
-                        for (int i = 0; i < 10; i++) {
-                            client.SendMessage(m.Channel, m.GetArg("string"));
-                        }
+                    .Parameter("code", ParameterType.Unparsed)
+                    .MinPermissions((int) Roles.Owner)
+                    .Do(e =>{
+                        var refs =
+                            Assembly.GetExecutingAssembly().GetReferencedAssemblies().Select(r => { return r.Name; });
+
+                        //var kek = new ImmutableArray<string>().ToBuilder().;
+
+                        var options = ScriptOptions.Default.AddReferences(
+                            typeof (DynamicObject).Assembly,
+                            typeof (DiscordClient).Assembly, // System.Code
+                            typeof (CSharpArgumentInfo).Assembly,
+                            typeof (ExpandoObject).Assembly, // Microsoft.CSharp
+                            typeof (DiscordClient).Assembly,
+                            typeof (CommandEventArgs).Assembly,
+                            typeof (ModuleManager).Assembly,
+                            typeof (CommandBuilderExtension).Assembly,
+                            typeof (ParameterType).Assembly)
+                            //.AddReferences(
+                            //    //"mscorlib",
+                            //    //"Discord.Net",
+                            //    //"Discord.Net.Commands",
+                            //    //"Discord.Net.Modules",
+                            //    //"Logic",
+                            //    //"Dba",
+                            //    "System.Core",
+                            //    "System.Net.Http",
+                            //    "System",
+                            //    "System.Web",
+                            //    //"Transmission.API.RPC",
+                            //    //"Newtonsoft.Json",
+                            //    //"Discord.Net.Audio",
+                            //    //"NAudio",
+                            //    //"EntityFramework",
+                            //    "Microsoft.CSharp",
+                            //    "System.Collections.Immutable",
+                            //    //"Microsoft.CodeAnalysis.Scripting.CSharp",
+                            //    "mscorlib"
+                            //    //"Discord.Net.Modules",
+                            //    //"Discord.Net.Commands",
+                            //    //"Microsoft.CodeAnalysis.Scripting"
+                            //    //"Microsoft.CSharp",
+                            //    //"Microsoft.CodeAnalysis.Scripting.CSharp"
+
+                            //    )
+                                .AddNamespaces("System.Dynamic");
+
+                        var client = cfg.Service.Client;
+                        var result = CSharpScript.Eval(e.Args[0], options,
+                            new Globals{client = client, e = e, cfg = cfg, manager = manager});
+                        return result?.ToString() ?? "";
                     });
-                    return result?.ToString() ?? "";
-                });
             });
         }
     }
 
-    public class Globals
-    {
-        // ReSharper disable InconsistentNaming
+    public class Globals {
+// ReSharper disable InconsistentNaming
         public DiscordClient client;
-        public CommandEventArgs e; 
-        public CommandGroupBuilder cfg; 
+        public CommandEventArgs e;
+        public CommandGroupBuilder cfg;
         public ModuleManager manager;
     }
 }

@@ -10,7 +10,6 @@ using Discord.Commands;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
 using RuiRuiBot.ExtensionMethods.DbExtensionMethods;
-using WebGrease.Css.Extensions;
 
 namespace RuiRuiBot.Botplugins.Triggers
 {
@@ -43,13 +42,13 @@ namespace RuiRuiBot.Botplugins.Triggers
 
                 try
                 {
-                     _triggers.Where(aot => long.Parse(aot.User) != m.User.Id) //can't trigger yourself
+                     _triggers.Where(aot => ulong.Parse(aot.User) != m.User.Id) //can't trigger yourself
                         .Where(a =>a.IsRegex//check if the word is said
                                     ? Regex.IsMatch(m.Message.Text, a.Trigger)
                                     : m.Message.Text.ToLower().Contains(a.Trigger))
                         .ForEach(async aot =>
                         {
-                            if (!m.Channel.Members.Contains(_client.GetUser(long.Parse(aot.User))))
+                            if (!m.Channel.Users.Contains(_client.GetUser(ulong.Parse(aot.User))))
                                 return; //can't trigger in channels the triggered user doesn't have read rights
                             var message = string.IsNullOrWhiteSpace(aot.Message)
                                 ? $"Triggered {(aot.IsRegex ? "a regular expression" : aot.Trigger)} by {m.User} on {"#" + m.Channel.Name}: `{m.Message.Text}`"
@@ -60,7 +59,7 @@ namespace RuiRuiBot.Botplugins.Triggers
                                     m.Message.Text, //{3} message that contains the trigger         
                                     DateTime.Now.ToShortTimeString() //{4} the time when the trigger occured
                                     );
-                            await _client.SendBigMessage(_client.GetUser(long.Parse(aot.User)), message);
+                            await _client.SendBigMessage(_client.GetUser(ulong.Parse(aot.User)), message);
                         });
                 }
                 catch (Exception ex)
@@ -95,18 +94,18 @@ namespace RuiRuiBot.Botplugins.Triggers
                 .Do(alertsoff); 
                 bot.CreateCommand("listtriggers").Do((m, db) =>{
                     return _triggers.Select(
-                        trigger => $"{ manager.Client.GetUser(long.Parse(trigger.User)) }: {trigger.Trigger} \n" );
+                        trigger => $"{ manager.Client.GetUser(ulong.Parse(trigger.User)) }: {trigger.Trigger} \n" );
                 });
             });
             
         }
 
-        private async Task RemoveTriggers(CommandEventArgs m, DbCtx db)
-        {
-            var r = db.AlertsOnTriggers.Where(aot => aot.User == m.User.Id.ToString());
+        private async Task RemoveTriggers(CommandEventArgs m, DbCtx db){
+            var u = m.User.Id.ToString();
+            var r = db.AlertsOnTriggers.Where(aot => aot.User == u);
             db.AlertsOnTriggers.RemoveRange(r);
             await db.SaveChangesAsync();
-            await _client.SendPrivateMessage(m.User, "Triggers removed.");
+            await m.User.SendMessage("Triggers removed.");
             ReloadTriggerList(db);
         }
 
@@ -121,7 +120,7 @@ namespace RuiRuiBot.Botplugins.Triggers
             };
             db.AlertsOnTriggers.Add(aot);
             await db.SaveChangesAsync();
-            await _client.SendPrivateMessage(m.User, $"{(isRegex ? "Regext" : "T")}rigger " + m.Args[0] + " added.");
+            await _client.SendBigMessage(m.User, $"{(isRegex ? "Regext" : "T")}rigger " + m.Args[0] + " added.");
             ReloadTriggerList(db);
         }
 

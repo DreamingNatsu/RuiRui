@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
+using RuiRuiBot.RuiRui;
 
 namespace RuiRuiConsole
 {
@@ -28,8 +29,8 @@ namespace RuiRuiConsole
 
 		public class Account
 		{
-			[JsonProperty("email")]
-			public string Email { get; set; }
+			[JsonProperty("user")]
+			public string User { get; set; }
 			[JsonProperty("password")]
 			public string Password { get; set; }
 		}
@@ -38,6 +39,9 @@ namespace RuiRuiConsole
 		public Account DevAccount { get; set; }
 		[JsonProperty("botuser")]
 		public Account BotAccount { get; set; }
-
+        [JsonProperty("googleapikey")]
+	    public string GoogleApiKey { get; set; }
+        [JsonProperty("anilist")]
+	    public AniListCredentials AniList { get; set; }
 	}
 }

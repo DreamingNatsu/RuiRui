@@ -60,18 +60,6 @@
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Discord\Discord.Net.Commands.Net45\Discord.Net.Commands.csproj">
-      <Project>{1b5603b4-6f8f-4289-b945-7baae523d740}</Project>
-      <Name>Discord.Net.Commands</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Discord\Discord.Net.Modules.Net45\Discord.Net.Modules.csproj">
-      <Project>{3091164f-66ae-4543-a63d-167c1116241d}</Project>
-      <Name>Discord.Net.Modules</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Discord\Discord.Net.Net45\Discord.Net.csproj">
-      <Project>{8D71A857-879A-4A10-859E-5FF824ED6688}</Project>
-      <Name>Discord.Net</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RuiRuiBot\RuiRui.csproj">
       <Project>{2e3f7784-9a45-4610-b855-b8492a01c577}</Project>
       <Name>RuiRui</Name>

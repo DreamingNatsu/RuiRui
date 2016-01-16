@@ -6,6 +6,7 @@ using Discord;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
+using RuiRuiBot.RuiRui;
 
 namespace RuiRuiBot.Botplugins.Useless {
     public class Rainbow : IModule {
@@ -19,7 +20,7 @@ namespace RuiRuiBot.Botplugins.Useless {
             manager.CreateCommands(bot =>{
                 bot.Category("Rainbow");
                 bot.CreateCommand("startrainbow")
-                    .Help("Starts the rainbow")
+                    .Description("Starts the rainbow")
                     .MinPermissions((int) Roles.Triumvirate)
                     .Do(m =>{
                         if (_isStopped == false) return;
@@ -32,7 +33,7 @@ namespace RuiRuiBot.Botplugins.Useless {
                         _rainbow.Start();
                     });
                 bot.CreateCommand("stoprainbow")
-                    .Help("Stops the rainbow")
+                    .Description("Stops the rainbow")
                     .MinPermissions((int) Roles.Triumvirate)
                     .Do(m =>{
                         lock (_locker) {
@@ -40,7 +41,7 @@ namespace RuiRuiBot.Botplugins.Useless {
                         }
                     });
                 bot.CreateCommand("color")
-                    .Help("Changes the color of a certain role in this server", "{rolename} {Red} {Green} {Blue}")
+                    .Description("Changes the color of a certain role in this server")
                     .MinPermissions((int) Roles.Triumvirate)
                     .Parameter("rolename")
                     .Parameter("Red")
@@ -51,22 +52,22 @@ namespace RuiRuiBot.Botplugins.Useless {
                         var color = GetColor(m.GetArg("Red"), m.GetArg("Green"), m.GetArg("Blue"));
                         var role = m.Server.Roles.FirstOrDefault(ro => ro.Name == rolename);
 
-                        await _client.EditRole(role, color: color);
+                        if (role != null) await role.Edit(color: color);
                     });
                 bot.CreateCommand("setcolor")
-                    .Help("gives your name a color")
+                    .Description("gives your name a color")
                     .Parameter("R")
                     .Parameter("G")
                     .Parameter("B")
                     .Do(
                         async m =>{
                             var role = m.Server.Roles.FirstOrDefault(r => r.Name == $"color-{m.User.Id}") ??
-                                       await _client.CreateRole(m.Server, $"color-{m.User.Id}");
+                                       await m.Server.CreateRole($"color-{m.User.Id}");
                             var color = GetColor(m.GetArg("R"), m.GetArg("G"), m.GetArg("B"));
-                            await _client.EditRole(role, permissions: new ServerPermissions(0), color: color);
+                            await role.Edit(permissions: new ServerPermissions(0), color: color);
                             var newroles = m.User.Roles.ToList();
                             newroles.Add(role);
-                            await _client.EditUser(m.User, roles: newroles);
+                            await m.User.Edit(roles: newroles);
                             return $"Color {color.ToString()} applied to {m.User.Name}";
                         });
             });
@@ -82,15 +83,15 @@ namespace RuiRuiBot.Botplugins.Useless {
         private async void RainbowThread(){
             {
             }
-            while (_client.State != DiscordClientState.Connected) {
+            while (_client.State != ConnectionState.Connected) {
                 await Task.Delay(500);
             }
             try {
-                var server = _client.GetServer(_client.GetService<RuiRui>().Config.MainServerId);
-                var role = _client.FindRoles(server, "lgbt").FirstOrDefault();
+                var server = _client.GetServer(_client.Services.Get<RuiRui.RuiRui>().Config.MainServerId);
+                var role = server.FindRoles("lgbt").FirstOrDefault();
                 var random = new Random();
                 var bytes = new byte[3];
-                while (_client.State == DiscordClientState.Connected) {
+                while (_client.State == ConnectionState.Connected) {
                     lock (_locker) {
                         if (_isStopped) {
                             return;
@@ -99,7 +100,7 @@ namespace RuiRuiBot.Botplugins.Useless {
                     random.NextBytes(bytes);
                     var color = new Color(bytes[0], bytes[1], bytes[2]);
                     //RuiRui.SayDev($"changing {role.Name} with [{color.R},{color.G},{color.B}]");
-                    await _client.EditRole(role, color: color, hoist: false);
+                    if (role != null) await role.Edit(color: color);
                     await Task.Delay(2000);
                 }
             }

@@ -12,6 +12,7 @@ using Discord.Modules;
 using Logic;
 using Logic.FileExplorer;
 using RuiRuiBot.ExtensionMethods;
+using RuiRuiBot.RuiRui;
 
 namespace RuiRuiBot.Botplugins.PersonalTools {
     public class TransmissionCommands : IModule {
@@ -27,7 +28,6 @@ namespace RuiRuiBot.Botplugins.PersonalTools {
 
         private void AddCommands(){
             _manager.CreateCommands(bot =>{
-
                 bot.MinPermissions((int) Roles.Owner);
 
 
@@ -68,13 +68,14 @@ namespace RuiRuiBot.Botplugins.PersonalTools {
 
 
                 Func<CommandEventArgs, IEnumerable<string>> getTorrents = m =>{
-                    var tz = TransmissionService.GetTorrents(m.Args.Length > 0 ? int.Parse(m.Args[0]) : 5);
+                    var arg = m.GetArg("amount");
+                    var tz = TransmissionService.GetTorrents(!string.IsNullOrWhiteSpace(arg)?int.Parse(arg):5);
                     var message = tz.Select(ti => $"{ti.Name} [{FileExplorerTools.BytesToString(ti.SizeWhenDone)}] [{ti.PercentDone*100}%]\n");
                     return message;
                 };
                 bot.CreateCommand("torrents")
                     .Parameter("amount", ParameterType.Optional)
-                    .Help("Gets the last X or 5 torrents from the torrent client")
+                    .Description("Gets the last X or 5 torrents from the torrent client")
                     .Do(getTorrents);
 
 
@@ -84,7 +85,7 @@ namespace RuiRuiBot.Botplugins.PersonalTools {
                 };
                 bot.CreateCommand("addtorrent")
                     .Parameter("torrentlink")
-                    .Help("Adds a torrent to the torrent client")
+                    .Description("Adds a torrent to the torrent client")
                     .Do(addTorrent);
 
             });

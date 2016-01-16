@@ -10,7 +10,8 @@ namespace RuiRuiBot.ExtensionMethods
 
 
         public static User GetDev(this DiscordClient client){
-            return client.GetService<RuiRui>().DevUser;
+            var service = client.Services.Get<RuiRui.RuiRui>(false);
+            return service?.DevUser;
         }
         public static async Task SendException(this DiscordClient client, Exception ex)
         {
@@ -33,9 +34,10 @@ namespace RuiRuiBot.ExtensionMethods
             await SendException(client, m.User, m.Channel, ex);
         }
 
-        private static async Task SendException(this DiscordClient client, User user, Channel c, Exception ex, Command command = null)
-        {
-            await client.GetService<RuiRui>().SendException(client,user,c,ex,command);
+        private static async Task SendException(this DiscordClient client, User user, Channel c, Exception ex, Command command = null){
+            var sendException = client.Services.Get<RuiRui.RuiRui>()?.SendException(client,user,c,ex,command);
+            if (sendException != null)
+                await sendException;
         }
     }
 }
