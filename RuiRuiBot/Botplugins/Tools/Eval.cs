@@ -3,12 +3,10 @@ using Discord;
 using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
-using Microsoft.CodeAnalysis.Scripting;
-using Microsoft.CodeAnalysis.Scripting.CSharp;
 using Microsoft.CSharp.RuntimeBinder;
 using RuiRuiBot.ExtensionMethods;
 using RuiRuiBot.Rui;
-
+/*
 namespace RuiRuiBot.Botplugins.Tools {
     public class Eval //: IModule
         //todo: fix this piece of shit
@@ -79,4 +77,4 @@ namespace RuiRuiBot.Botplugins.Tools {
         public CommandGroupBuilder cfg;
         public ModuleManager manager;
     }
-}
+}*/
