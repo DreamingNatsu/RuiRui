@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logic", "Logic", "{061586D2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rui", "Rui", "{3EC6C2A6-3541-42C2-976B-BD8BD305E971}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuiRuiUpdate", "RuiRuiUpdate\RuiRuiUpdate.csproj", "{A8195D3F-BEF5-4309-8779-A652E393BBED}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discord", "Discord", "{77733061-E122-471C-94FB-D85556BF6D0D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8D7989F0-66CE-4DBB-8230-D8C811E9B1D7}"
@@ -55,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuiRuiBot", "RuiRuiBot\RuiR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuiRuiConsole", "RuiRuiConsole\RuiRuiConsole.csproj", "{FB8EB867-7A8E-48F9-8287-AF5AE929EB83}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuiRuiUpdate", "RuiRuiUpdate\RuiRuiUpdate.csproj", "{A8195D3F-BEF5-4309-8779-A652E393BBED}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Discord.Net\src\Discord.Net.Shared\Discord.Net.Shared.projitems*{2875deb5-f248-4105-8ea2-5141e3de8025}*SharedItemsImports = 13
@@ -71,16 +71,6 @@ Global
 		TestResponses|Any CPU = TestResponses|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A8195D3F-BEF5-4309-8779-A652E393BBED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A8195D3F-BEF5-4309-8779-A652E393BBED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A8195D3F-BEF5-4309-8779-A652E393BBED}.FullDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A8195D3F-BEF5-4309-8779-A652E393BBED}.FullDebug|Any CPU.Build.0 = Debug|Any CPU
-		{A8195D3F-BEF5-4309-8779-A652E393BBED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A8195D3F-BEF5-4309-8779-A652E393BBED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A8195D3F-BEF5-4309-8779-A652E393BBED}.ReleasePublish|Any CPU.ActiveCfg = Release|Any CPU
-		{A8195D3F-BEF5-4309-8779-A652E393BBED}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
-		{A8195D3F-BEF5-4309-8779-A652E393BBED}.TestResponses|Any CPU.ActiveCfg = Release|Any CPU
-		{A8195D3F-BEF5-4309-8779-A652E393BBED}.TestResponses|Any CPU.Build.0 = Release|Any CPU
 		{ACFB060B-EC8A-4926-B293-04C01E17EE23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ACFB060B-EC8A-4926-B293-04C01E17EE23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACFB060B-EC8A-4926-B293-04C01E17EE23}.FullDebug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -211,6 +201,16 @@ Global
 		{FB8EB867-7A8E-48F9-8287-AF5AE929EB83}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
 		{FB8EB867-7A8E-48F9-8287-AF5AE929EB83}.TestResponses|Any CPU.ActiveCfg = Release|Any CPU
 		{FB8EB867-7A8E-48F9-8287-AF5AE929EB83}.TestResponses|Any CPU.Build.0 = Release|Any CPU
+		{A8195D3F-BEF5-4309-8779-A652E393BBED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8195D3F-BEF5-4309-8779-A652E393BBED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8195D3F-BEF5-4309-8779-A652E393BBED}.FullDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8195D3F-BEF5-4309-8779-A652E393BBED}.FullDebug|Any CPU.Build.0 = Debug|Any CPU
+		{A8195D3F-BEF5-4309-8779-A652E393BBED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8195D3F-BEF5-4309-8779-A652E393BBED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8195D3F-BEF5-4309-8779-A652E393BBED}.ReleasePublish|Any CPU.ActiveCfg = Release|Any CPU
+		{A8195D3F-BEF5-4309-8779-A652E393BBED}.ReleasePublish|Any CPU.Build.0 = Release|Any CPU
+		{A8195D3F-BEF5-4309-8779-A652E393BBED}.TestResponses|Any CPU.ActiveCfg = Release|Any CPU
+		{A8195D3F-BEF5-4309-8779-A652E393BBED}.TestResponses|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -236,5 +236,6 @@ Global
 		{3D33F97F-993A-4C48-ACDE-43F18EA7341E} = {061586D2-8115-4885-9381-97AA846188E3}
 		{2E3F7784-9A45-4610-B855-B8492A01C577} = {3EC6C2A6-3541-42C2-976B-BD8BD305E971}
 		{FB8EB867-7A8E-48F9-8287-AF5AE929EB83} = {3EC6C2A6-3541-42C2-976B-BD8BD305E971}
+		{A8195D3F-BEF5-4309-8779-A652E393BBED} = {3EC6C2A6-3541-42C2-976B-BD8BD305E971}
 	EndGlobalSection
 EndGlobal
