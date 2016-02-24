@@ -5,8 +5,6 @@ using Discord.Modules;
 using Newtonsoft.Json;
 using RuiRuiBot.ExtensionMethods;
 
-
-
 namespace RuiRuiBot.Botplugins.Information {
     internal class TsCommands : IModule {
 

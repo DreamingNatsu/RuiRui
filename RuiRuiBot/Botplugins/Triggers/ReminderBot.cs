@@ -4,11 +4,14 @@ using System.Linq;
 using Dba.DAL;
 using Dba.DTO.BotDTO;
 using Discord;
+using Discord.Commands;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
 
+
 namespace RuiRuiBot.Botplugins.Triggers {
-    public class ReminderBot : IModule {
+    public class ReminderBot : IModule
+    {
         private ModuleManager _manager;
         private const string Listener = "rui, remind ";
         private DiscordClient Client => _manager.Client;
@@ -16,17 +19,23 @@ namespace RuiRuiBot.Botplugins.Triggers {
         public void Install(ModuleManager manager)
         {
             _manager = manager;
-            AddListner(manager);
-            AddService(manager);
+            //AddListner(manager);
+            //AddService(manager);
+            manager.CreateCommands(man =>{
+                man.CreateCommand("timeconvert").Parameter("time",ParameterType.Unparsed).Do(m => {
+                    return ParseHumanDate(m.GetArg("time")).Select(d=> d.ToLongDateString()+" "+d.ToLongTimeString()+"\n");
+                });
+            });
+
         }
 
-        private void AddService(ModuleManager manager){
-            manager.MessageReceived+=(async (s, m) =>{
+        public void AddService(ModuleManager manager){
+            manager.MessageReceived+=manager.TryEvent<MessageEventArgs>(async (s, m) =>{
                 try {
                     if (m.Message.User.Id == Client.CurrentUser.Id)
-                        return;
+                        return;//don't trigger ourselves
                     if (m.Message.Text.ToLower().StartsWith(Listener))
-                        return;
+                        return;//check for startmessage
                     using (var db = new DbCtx()) {
                         var removeEntities = new List<Reminder>();
                         db.Reminders.Where(r =>
@@ -41,7 +50,7 @@ namespace RuiRuiBot.Botplugins.Triggers {
                                 var username = user.Name;
                                 var message = "@" + username + ", " + creatorname + " wanted me to remind you " +
                                               r.Message;
-                                await Client.SendBigMessage(channel, message);
+                                await channel.SendBigMessage(message);
                                 removeEntities.Add(r);
                             });
                         removeEntities.ForEach(r => db.Reminders.Remove(r));
@@ -54,6 +63,12 @@ namespace RuiRuiBot.Botplugins.Triggers {
             });
         }
 
+        private static IEnumerable<DateTime> ParseHumanDate(string input){
+
+            var rpcClient = new RpcClient();
+            return rpcClient.Call(input);
+            
+        } 
         public void AddListner(ModuleManager manager){
             manager.MessageReceived+=(async (s, m) =>{
                 try {
@@ -67,7 +82,7 @@ namespace RuiRuiBot.Botplugins.Triggers {
                     var commandparts = commandtext.Split(new[]{" that "}, StringSplitOptions.None);
 
                     if (commandparts.Length <= 1) {
-                        await Client.SendBigMessage(m.Channel, "WAKARIMASEN LOL");
+                        await m.Channel.SendBigMessage("WAKARIMASEN LOL");
                         return;
                     }
 
@@ -84,7 +99,7 @@ namespace RuiRuiBot.Botplugins.Triggers {
                             reminder.ChannelId = m.Channel.IsPrivate ? d.PrivateChannel.Id.ToString() : m.Channel.Id.ToString();
                         }
                         else {
-                            await Client.SendBigMessage(m.Channel, "Couldn't find the user '" + name + "'");
+                            await m.Channel.SendBigMessage("Couldn't find the user '" + name + "'");
                             return;
                         }
                         //RuiRui.Say(m.Channel, "I can't remind '" + name + "' in this private channel, as he can't read it or even trigger it, are you retarded or something?");
@@ -105,7 +120,7 @@ namespace RuiRuiBot.Botplugins.Triggers {
                         db.Reminders.Add(reminder);
                         await db.SaveChangesAsync();
                     }
-                    await Client.SendBigMessage(m.Channel, "Ok.");
+                    await m.Channel.SendBigMessage("Ok.");
                 }
                 catch (Exception ex) {
                     await Client.SendException(m, ex);

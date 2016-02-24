@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
-using RuiRuiBot.RuiRui;
+using RuiRuiBot.Rui;
 
 namespace RuiRuiBot.ExtensionMethods
 {
@@ -75,11 +75,11 @@ namespace RuiRuiBot.ExtensionMethods
                 var v = await action.Invoke(m);
                 if (isPrivate)
                 {
-                    await cb.Service.Client.SendBigMessage(m.User, v);
+                    await m.User.SendBigMessage(v);
                 }
                 else
                 {
-                    await cb.Service.Client.SendBigMessage(m.Channel, v); 
+                    await m.Channel.SendBigMessage(v); 
                 }
                 
             };
@@ -102,11 +102,11 @@ namespace RuiRuiBot.ExtensionMethods
                     var v = await action.Invoke(m,t);
                     if (isPrivate)
                     {
-                        await cb.Service.Client.SendBigMessage(m.User, v);
+                        await m.User.SendBigMessage(v);
                     }
                     else
                     {
-                        await cb.Service.Client.SendBigMessage(m.Channel, v);
+                        await m.Channel.SendBigMessage(v);
                     }
                 }
             };
@@ -126,11 +126,11 @@ namespace RuiRuiBot.ExtensionMethods
                 var v = await action.Invoke(m);
                 if (isPrivate)
                 {
-                    await cb.Service.Client.SendBigMessage(m.User, v);
+                    await m.User.SendBigMessage(v);
                 }
                 else
                 {
-                    await cb.Service.Client.SendBigMessage(m.Channel, v);
+                    await m.Channel.SendBigMessage(v);
                 }
 
             };
@@ -153,11 +153,11 @@ namespace RuiRuiBot.ExtensionMethods
                     var v = await action.Invoke(m, t);
                     if (isPrivate)
                     {
-                        await cb.Service.Client.SendBigMessage(m.User, v);
+                        await m.User.SendBigMessage(v);
                     }
                     else
                     {
-                        await cb.Service.Client.SendBigMessage(m.Channel, v);
+                        await m.Channel.SendBigMessage(v);
                     }
                 }
             };
@@ -177,11 +177,11 @@ namespace RuiRuiBot.ExtensionMethods
                 var v = action.Invoke(m);
                 if (isPrivate)
                 {
-                    await cb.Service.Client.SendBigMessage(m.User, v);
+                    await m.User.SendBigMessage(v);
                 }
                 else
                 {
-                    await cb.Service.Client.SendBigMessage(m.Channel, v);
+                    await m.Channel.SendBigMessage(v);
                 }
 
             };
@@ -204,11 +204,11 @@ namespace RuiRuiBot.ExtensionMethods
                     var v = action.Invoke(m, t);
                     if (isPrivate)
                     {
-                        await cb.Service.Client.SendBigMessage(m.User, v);
+                        await m.User.SendBigMessage(v);
                     }
                     else
                     {
-                        await cb.Service.Client.SendBigMessage(m.Channel, v);
+                        await m.Channel.SendBigMessage(v);
                     }
                 }
             };
@@ -228,11 +228,11 @@ namespace RuiRuiBot.ExtensionMethods
                 var v = action.Invoke(m);
                 if (isPrivate)
                 {
-                    await cb.Service.Client.SendBigMessage(m.User, v);
+                    await m.User.SendBigMessage(v);
                 }
                 else
                 {
-                    await cb.Service.Client.SendBigMessage(m.Channel, v);
+                    await m.Channel.SendBigMessage(v);
                 }
 
             };
@@ -255,11 +255,11 @@ namespace RuiRuiBot.ExtensionMethods
                     var v = action.Invoke(m, t);
                     if (isPrivate)
                     {
-                        await cb.Service.Client.SendBigMessage(m.User, v);
+                        await m.User.SendBigMessage(v);
                     }
                     else
                     {
-                        await cb.Service.Client.SendBigMessage(m.Channel, v);
+                        await m.Channel.SendBigMessage(v);
                     }
                 }
             };
@@ -279,7 +279,7 @@ namespace RuiRuiBot.ExtensionMethods
     }
     
 
-
+    [Serializable]
     internal class ExceptionBehaviorNotFoundException : Exception
     {
         public ExceptionBehaviorNotFoundException(string message,Exception ex):base(message,ex)

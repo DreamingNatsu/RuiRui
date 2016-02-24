@@ -1,5 +1,6 @@
 using Discord.Commands;
 using Discord.Modules;
+
 namespace RuiRuiBot.Botplugins.Useless {
     internal class IsPlaying : IModule {
         public void Install(ModuleManager manager) =>

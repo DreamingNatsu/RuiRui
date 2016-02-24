@@ -9,12 +9,27 @@ namespace RuiRuiBot.ExtensionMethods
     public static class TextToolExtensions
     {
         private const int Maxlength = 2000;
-        private const int MaxTtsLength = 100;
+        private const int MaxTtsLength = 200;
 
-        public static async Task SendBigMessage(this DiscordClient client, Channel channel, string message,bool isTts = false)
+        [Obsolete("use channel.SendBigMessage instead")]
+        public static async Task SendBigMessage(this DiscordClient client, Channel channel, string message, bool isTts = false)
+            => await SendBigMessage(channel, message, isTts);
+        
+        [Obsolete("use user.SendBigMessage instead")]
+        public static async Task SendBigMessage(this DiscordClient client, User user, IEnumerable<string> message)
+            => await SendBigMessage(user, message);
+
+        [Obsolete("use user.SendBigMessage instead")]
+        public static async Task SendBigMessage(this DiscordClient client, User user, string message)
+            => await SendBigMessage(user, message);
+
+        [Obsolete("use channel.SendBigMessage instead")]
+        public static async Task SendBigMessage(this DiscordClient client, Channel channel, IEnumerable<string> message, bool isTts = false)
+            => await channel.SendBigMessage(message);
+
+        public static async Task SendBigMessage(this Channel channel, string message,bool isTts = false)
         {
             var maxlength = isTts ? MaxTtsLength : Maxlength;
-
             while (true)
             {
                 if (message.Length > maxlength)
@@ -27,8 +42,6 @@ namespace RuiRuiBot.ExtensionMethods
                     {
                         await channel.SendMessage(new string(message.Take(maxlength).ToArray()));  
                     }
-                    
-
                     message = new string(message.Skip(maxlength).ToArray());
                     continue;
                 }
@@ -36,11 +49,12 @@ namespace RuiRuiBot.ExtensionMethods
                     await channel.SendTTSMessage(message);
                 else
                     await channel.SendMessage(message);
-
                 break;
             }
         }
-        public static async Task SendBigMessage(this DiscordClient client, User user, string message)
+
+
+        public static async Task SendBigMessage(this User user, string message)
         {
             while (true)
             {
@@ -57,8 +71,7 @@ namespace RuiRuiBot.ExtensionMethods
 
 
 
-
-        public static async Task SendBigMessage(this DiscordClient client, Channel channel, IEnumerable<string> message,bool isTts = false)
+        public static async Task SendBigMessage(this Channel channel, IEnumerable<string> message,bool isTts = false)
         {
             var enumerable = message as IList<string> ?? message.ToList();
             try
@@ -66,16 +79,17 @@ namespace RuiRuiBot.ExtensionMethods
                 var bufferlist = GetBufferList(enumerable,isTts);
                 foreach (var b in bufferlist)
                 {
-                    await client.SendBigMessage(channel, b, isTts);
+                    await channel.SendBigMessage(b, isTts);
                 }
             }
             catch (ArgumentOutOfRangeException)
             {
-                await client.SendBigMessage(channel, enumerable.Aggregate((t1, t2) => t1 + t2));
+                await channel.SendBigMessage(enumerable.Aggregate((t1, t2) => t1 + t2));
             }
         }
 
-        public static async Task SendBigMessage(this DiscordClient client, User user, IEnumerable<string> message)
+
+        public static async Task SendBigMessage(this User user, IEnumerable<string> message)
         {
             var enumerable = message as IList<string> ?? message.ToList();
             try
@@ -83,12 +97,12 @@ namespace RuiRuiBot.ExtensionMethods
                 var bufferlist = GetBufferList(enumerable);
                 foreach (var b in bufferlist)
                 {
-                    await client.SendBigMessage(user, b);
+                    await user.SendBigMessage(b);
                 }
             }
             catch (ArgumentOutOfRangeException)
             {
-                await client.SendBigMessage(user, enumerable.Aggregate((t1, t2) => t1 + t2));
+                await user.SendBigMessage(enumerable.Aggregate((t1, t2) => t1 + t2));
             }
         }
 

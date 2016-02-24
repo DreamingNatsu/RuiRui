@@ -3,10 +3,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
-using RuiRuiBot.RuiRui;
+using RuiRuiBot.Rui;
+using RuiRuiBot.Services;
 
 namespace RuiRuiBot.Botplugins.Useless {
     public class Rainbow : IModule {
@@ -19,9 +21,8 @@ namespace RuiRuiBot.Botplugins.Useless {
             _client = manager.Client;
             manager.CreateCommands(bot =>{
                 bot.Category("Rainbow");
-                bot.CreateCommand("startrainbow")
-                    .Description("Starts the rainbow")
-                    .MinPermissions((int) Roles.Triumvirate)
+                PermissionLevelExtensions.MinPermissions((CommandBuilder) bot.CreateCommand("startrainbow")
+                    .Description("Starts the rainbow"), (int) Roles.Triumvirate)
                     .Do(m =>{
                         if (_isStopped == false) return;
 
@@ -32,17 +33,15 @@ namespace RuiRuiBot.Botplugins.Useless {
                         _rainbow = new Thread(RainbowThread);
                         _rainbow.Start();
                     });
-                bot.CreateCommand("stoprainbow")
-                    .Description("Stops the rainbow")
-                    .MinPermissions((int) Roles.Triumvirate)
+                PermissionLevelExtensions.MinPermissions((CommandBuilder) bot.CreateCommand("stoprainbow")
+                    .Description("Stops the rainbow"), (int) Roles.Triumvirate)
                     .Do(m =>{
                         lock (_locker) {
                             _isStopped = true;
                         }
                     });
-                bot.CreateCommand("color")
-                    .Description("Changes the color of a certain role in this server")
-                    .MinPermissions((int) Roles.Triumvirate)
+                PermissionLevelExtensions.MinPermissions((CommandBuilder) bot.CreateCommand("color")
+                    .Description("Changes the color of a certain role in this server"), (int) Roles.Triumvirate)
                     .Parameter("rolename")
                     .Parameter("Red")
                     .Parameter("Green")
@@ -61,11 +60,11 @@ namespace RuiRuiBot.Botplugins.Useless {
                     .Parameter("B")
                     .Do(
                         async m =>{
-                            var role = m.Server.Roles.FirstOrDefault(r => r.Name == $"color-{m.User.Id}") ??
+                            var role = Enumerable.FirstOrDefault<Role>(m.Server.Roles, r => r.Name == $"color-{m.User.Id}") ??
                                        await m.Server.CreateRole($"color-{m.User.Id}");
                             var color = GetColor(m.GetArg("R"), m.GetArg("G"), m.GetArg("B"));
                             await role.Edit(permissions: new ServerPermissions(0), color: color);
-                            var newroles = m.User.Roles.ToList();
+                            var newroles = Enumerable.ToList<Role>(m.User.Roles);
                             newroles.Add(role);
                             await m.User.Edit(roles: newroles);
                             return $"Color {color.ToString()} applied to {m.User.Name}";
@@ -87,7 +86,7 @@ namespace RuiRuiBot.Botplugins.Useless {
                 await Task.Delay(500);
             }
             try {
-                var server = _client.GetServer(_client.Services.Get<RuiRui.RuiRui>().Config.MainServerId);
+                var server = _client.GetServer(_client.Services.Get<Rui.RuiRui>().Config.MainServerId);
                 var role = server.FindRoles("lgbt").FirstOrDefault();
                 var random = new Random();
                 var bytes = new byte[3];

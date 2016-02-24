@@ -15,6 +15,10 @@
     "user": "username",
     "password": "password"
   },
-  "connectionstring": "Data Source=example.com\\databaseinstance;Initial Catalog=databasename;User Id=user;Password=password;MultipleActiveResultSets=true"
-  
+  "connectionstring": "Data Source=example.com\\databaseinstance;Initial Catalog=databasename;User Id=user;Password=password;MultipleActiveResultSets=true",
+  "googleapikey": "AIzaSyDyxomGPYu3vKanDNMbGF4Zs-EyeCYVYD0",
+  "anilist": {
+    "clientid": "clientId",
+    "clientsecret": "CjcZ3UAPIKEYgCFdS97"
+  }
 }

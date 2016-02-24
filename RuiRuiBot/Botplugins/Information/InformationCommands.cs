@@ -19,7 +19,7 @@ using ParameterType = Discord.Commands.ParameterType;
 
 namespace RuiRuiBot.Botplugins.Information {
     internal class InformationCommands : IModule {
-        private RuiRui.RuiRui.BotConfig _rui;
+        private Rui.RuiRui.BotConfig _rui;
 
         private string token = "";
 

@@ -1,6 +1,4 @@
 ﻿using System.Dynamic;
-using System.Linq;
-using System.Reflection;
 using Discord;
 using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
@@ -9,18 +7,20 @@ using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.CodeAnalysis.Scripting.CSharp;
 using Microsoft.CSharp.RuntimeBinder;
 using RuiRuiBot.ExtensionMethods;
-using RuiRuiBot.RuiRui;
+using RuiRuiBot.Rui;
 
 namespace RuiRuiBot.Botplugins.Tools {
-    public class Eval : IModule {
+    public class Eval //: IModule
+        //todo: fix this piece of shit
+    {
         public void Install(ModuleManager manager){
             manager.CreateCommands("", cfg =>{
                 cfg.CreateCommand("eval")
                     .Parameter("code", ParameterType.Unparsed)
                     .MinPermissions((int) Roles.Owner)
                     .Do(e =>{
-                        var refs =
-                            Assembly.GetExecutingAssembly().GetReferencedAssemblies().Select(r => { return r.Name; });
+                       // var refs =
+                         //   Assembly.GetExecutingAssembly().GetReferencedAssemblies().Select(r => { return r.Name; });
 
                         //var kek = new ImmutableArray<string>().ToBuilder().;
 

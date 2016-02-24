@@ -23,6 +23,11 @@ namespace RuiRuiBot.Botplugins.Useless
                     var amount = split[0] == "" ? 1 : int.Parse(split[0]);
                     var eyes = int.Parse(split[1]);
                     var throws = new int[amount];
+
+                    if (amount > 200 || eyes > 200) {
+                        return $"FUCK YOU I'M NOT ROLLING {amount} d{eyes}'s, MY HAND WILL GET CARPAL TUNNEL :c";
+                    }
+
                     var k = "";
                     var total = 0;
                     throws.ForEach(t =>

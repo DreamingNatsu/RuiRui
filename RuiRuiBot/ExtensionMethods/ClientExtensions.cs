@@ -1,15 +1,41 @@
 ﻿using System;
 using System.Data.Entity.Core;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.Modules;
 using Newtonsoft.Json;
 
 namespace RuiRuiBot.ExtensionMethods
 {
     public static class ClientExtensions
     {
+        public static EventHandler<T> TryEvent<T>(this DiscordClient client, EventHandler<T> eventhandle){
+            return async (sender, args) =>{
+                try
+                {
+                    eventhandle.Invoke(sender, args);
+                }
+                catch (Exception e)
+                {
+                    await client.SendException(e);
+                }
+            };
+        }
+        
+        public static EventHandler<T> TryEvent<T>(this ModuleManager client, EventHandler<T> eventHandler)=>
+            client.Client.TryEvent(eventHandler);
+
+        public static async Task<Message> SendFile(this Channel client, string url, string filename){
+            using (var wc = new WebClient()) {
+                var data = wc.OpenRead(url);
+                return await client.SendFile(filename,data);
+            }
+        }
+
+
         public static User GetUser(this DiscordClient client, ulong userId){
             User user = null;
             client.Servers.ForEach(server => {
@@ -21,18 +47,29 @@ namespace RuiRuiBot.ExtensionMethods
             return user;
         }
     }
+
+    public class EventHandlerWrapper<T> {
+        public EventHandlerWrapper(EventHandler<T> handler, DiscordClient client){
+            Handler = handler;
+            Client = client;
+        }
+
+        public DiscordClient Client { get; }
+        public EventHandler<T> Handler { get; }
+    }
+
     public static class Extensions
     {
         public static Task Reply(this DiscordClient client, CommandEventArgs e, string text)
             => Reply(client, e.User, e.Channel, text);
-        public async static Task Reply(this DiscordClient client, User user, Channel channel, string text)
+        public static async Task Reply(this DiscordClient client, User user, Channel channel, string text)
         {
             if (text != null)
             {
                 if (!channel.IsPrivate)
-                    await client.SendBigMessage(channel, $"{user.Name}: {text}");
+                    await channel.SendBigMessage($"{user.Name}: {text}");
                 else
-                    await client.SendBigMessage(channel, text);
+                    await channel.SendBigMessage(text);
             }
         }
         public static Task Reply<T>(this DiscordClient client, CommandEventArgs e, string prefix, T obj)

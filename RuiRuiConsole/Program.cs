@@ -5,8 +5,8 @@ using Discord.Commands;
 using Edokan.KaiZen.Colors;
 using Logic;
 using RuiRuiBot.ExtensionMethods;
-using RuiRuiBot.RuiRui;
 using RuiRuiBot.Services;
+using RuiRuiBot.Rui;
 using RuiRuiConsole.Extensions;
 
 namespace RuiRuiConsole {
@@ -42,13 +42,13 @@ namespace RuiRuiConsole {
                 client.Log.Message += (sender, eventArgs) => _output.WriteLine(GetTime().Grey() + $"[{eventArgs.Severity}]".Red() + $"{{{eventArgs.Source.ToString()}}}".Cyan() + $": {eventArgs.Message}");
                 client.MessageReceived += async (sender, eventArgs) => await _output.WriteLine(GetTime().Grey() + $"[{eventArgs.Server?.Name} #{eventArgs.Channel.Name}][{eventArgs.User.Name}]:".Grey()+$" {eventArgs.Message.Text}");
                 await rui.Start();
-                client.Commands().CommandExecuted += Program_RanCommand;
-                client.Commands().CommandErrored += Program_CommandError;
+                client.CommandService().CommandExecuted += Program_RanCommand;
+                client.CommandService().CommandErrored += Program_CommandError;
                 //client.ConsoleService().ClearConsole += (sender, eventArgs) => _output.Clear();
                 //client.ConsoleService().WriteConsole += async (sender, text) => await _output.WriteLine(text);
 #if DEBUG
                 var consoleClient = new DiscordClient();
-                consoleClient.Connected += (o, eventArgs) => _output.WriteLine(GetTime().Grey() + "Logged in " + ((DiscordClient)o).CurrentUser.Email.Red());
+                consoleClient.Ready += (o, eventArgs) => _output.WriteLine(GetTime().Grey() + "Logged in " + ((DiscordClient)o).CurrentUser.Email.Red());
                 await Login(consoleClient, settings.DevAccount.User, settings.DevAccount.Password);
                 await _output.WriteLine(GetTime().Grey()+"Input is now availabe".Green());
                 while (true) {

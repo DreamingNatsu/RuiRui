@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
-using RuiRuiBot.RuiRui;
+using RuiRuiBot.Rui;
 
 namespace RuiRuiConsole
 {

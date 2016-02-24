@@ -22,7 +22,7 @@ namespace RuiRuiBot.ExtensionMethods
 
             var help = command;
             string[] returnstring = {"**" + commandchar + command.Text + "** "};
-            if (string.IsNullOrEmpty(help.Description))
+            if (!string.IsNullOrEmpty(help.Description))
             {
                 returnstring[0] += help.Description.Replace("\n", "\n\t");
                 if (command.Aliases == null) return returnstring[0];

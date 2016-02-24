@@ -9,20 +9,19 @@ namespace RuiRuiBot.ExtensionMethods
 
         public static async Task SendDev(this DiscordClient client, string message){
             
-            await client.SendBigMessage(client.GetDev(), message);
+            await client.GetDev().SendBigMessage(message);
         }
         public static async Task SendDev(this DiscordClient client, IEnumerable<string> message)
         {
-            await client.SendBigMessage(client.GetDev(), message);
+            await client.GetDev().SendBigMessage(message);
         }
         public static async Task SendDev(this DiscordClient client, string message,CommandErrorEventArgs errorEvent)
         {
-            await client.SendBigMessage(client.GetDev(), message);
+            await client.GetDev().SendBigMessage(message);
         }
         public static async Task SendDev(this DiscordClient client, IEnumerable<string> message, CommandErrorEventArgs errorEvent)
         {
-            
-            await client.SendBigMessage(client.GetDev(), message);
+            await client.GetDev().SendBigMessage(message);
         }
     }
 }

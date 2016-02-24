@@ -34,14 +34,11 @@ namespace RuiRuiBot.Botplugins.Triggers
         private void InitTriggers(ModuleManager manager)
         {
             
-            manager.MessageReceived+=(async (s, m) =>
+            manager.MessageReceived+=manager.Client.TryEvent<MessageEventArgs>((s, m) =>
             {
 
                 if (!m.Message.Text.StartsWith("Test:")&&(m.User.Id == _client.CurrentUser.Id || m.Channel.IsPrivate || m.Message?.Text == null))
                     return; //ignore ourselves and private channels
-
-                try
-                {
                      _triggers.Where(aot => ulong.Parse(aot.User) != m.User.Id) //can't trigger yourself
                         .Where(a =>a.IsRegex//check if the word is said
                                     ? Regex.IsMatch(m.Message.Text, a.Trigger)
@@ -59,13 +56,9 @@ namespace RuiRuiBot.Botplugins.Triggers
                                     m.Message.Text, //{3} message that contains the trigger         
                                     DateTime.Now.ToShortTimeString() //{4} the time when the trigger occured
                                     );
-                            await _client.SendBigMessage(_client.GetUser(ulong.Parse(aot.User)), message);
+                            await _client.GetUser(ulong.Parse(aot.User)).SendBigMessage(message);
                         });
-                }
-                catch (Exception ex)
-                {
-                    await _client.SendException(ex);
-                }
+
             });
         }
 
@@ -120,7 +113,7 @@ namespace RuiRuiBot.Botplugins.Triggers
             };
             db.AlertsOnTriggers.Add(aot);
             await db.SaveChangesAsync();
-            await _client.SendBigMessage(m.User, $"{(isRegex ? "Regext" : "T")}rigger " + m.Args[0] + " added.");
+            await m.User.SendBigMessage($"{(isRegex ? "Regext" : "T")}rigger " + m.Args[0] + " added.");
             ReloadTriggerList(db);
         }
 

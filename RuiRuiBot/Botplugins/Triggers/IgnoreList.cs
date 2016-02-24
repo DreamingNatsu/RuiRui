@@ -9,14 +9,13 @@ using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
 using RuiRuiBot.ExtensionMethods.DbExtensionMethods;
-using RuiRuiBot.RuiRui;
+using RuiRuiBot.Rui;
 using RuiRuiBot.Services;
 
 namespace RuiRuiBot.Botplugins.Triggers {
     [LockedPlugin]
     internal class IgnoreList : IModule {
         public static List<UserIgnore> List { get; set; }
-        private DiscordClient _client;
 
         private static bool ToggleIgnore(User user, DbCtx db){
             lock (List) {
@@ -42,7 +41,6 @@ namespace RuiRuiBot.Botplugins.Triggers {
 
         public void Install(ModuleManager manager)
         {
-            _client = manager.Client;
             using (var db = new DbCtx())
             {
                 List = db.UserIgnores.ToList();
@@ -51,15 +49,15 @@ namespace RuiRuiBot.Botplugins.Triggers {
                 var user = m.Server.FindUsers(m.Args[0]).FirstOrDefault();
                 if (user == null)
                 {
-                    await _client.SendBigMessage(m.Channel, "I couldn't find that user");
+                    await m.Channel.SendBigMessage("I couldn't find that user");
                     return;
                 }
-                await _client.SendBigMessage(m.Channel,
+                await m.Channel.SendBigMessage(
                     ToggleIgnore(user, db) ? $"I will ignore {user.Name}" : $"I will no longer ignore {user.Name}");
             };
 
             Action<CommandEventArgs, DbCtx> ignoreme = async (m, db) => {
-                    await _client.SendBigMessage(m.Channel, ToggleIgnore(m.User, db) ? "I will ignore you" : "I will no longer ignore you");
+                    await m.Channel.SendBigMessage(ToggleIgnore(m.User, db) ? "I will ignore you" : "I will no longer ignore you");
                 };
             manager.CreateCommands(bot =>
             {

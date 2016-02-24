@@ -1,16 +1,17 @@
 ﻿using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
+using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
-using RuiRuiBot.RuiRui;
+using RuiRuiBot.Rui;
 
 namespace RuiRuiBot.Botplugins.PersonalTools {
     public class WakeOnLan : IModule {
         public void Install(ModuleManager manager){
             manager.CreateCommands(bot => {
-                bot.MinPermissions((int)Roles.Triumvirate);
+                PermissionLevelExtensions.MinPermissions((CommandGroupBuilder) bot, (int)Roles.Triumvirate);
                 bot.CreateCommand("wakeonlan").Do(m => {
                     WakeFunction("D05099368DB5");
                     return "Sending wake-on-lan packets in local network.";

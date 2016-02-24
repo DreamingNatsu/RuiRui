@@ -7,7 +7,7 @@ using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
 using Discord.Modules;
 using RuiRuiBot.ExtensionMethods;
-using RuiRuiBot.RuiRui;
+using RuiRuiBot.Rui;
 using RuiRuiBot.Services;
 
 namespace RuiRuiBot.Botplugins.Tools {

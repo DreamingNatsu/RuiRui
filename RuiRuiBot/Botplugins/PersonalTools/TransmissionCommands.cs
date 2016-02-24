@@ -12,7 +12,7 @@ using Discord.Modules;
 using Logic;
 using Logic.FileExplorer;
 using RuiRuiBot.ExtensionMethods;
-using RuiRuiBot.RuiRui;
+using RuiRuiBot.Rui;
 
 namespace RuiRuiBot.Botplugins.PersonalTools {
     public class TransmissionCommands : IModule {
@@ -28,7 +28,7 @@ namespace RuiRuiBot.Botplugins.PersonalTools {
 
         private void AddCommands(){
             _manager.CreateCommands(bot =>{
-                bot.MinPermissions((int) Roles.Owner);
+                PermissionLevelExtensions.MinPermissions((CommandGroupBuilder) bot, (int) Roles.Owner);
 
 
                 Func<CommandEventArgs, RssTorrentManager, string> updateRss = (m, rss) =>{

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -7,8 +6,16 @@ using System.Threading.Tasks;
 
 namespace RuiRuiBot.ExtensionMethods
 {
+    public static class EnumerableOperatorExtensions
+        {
+            public static IEnumerable<T> Addition<T>(this IEnumerable<T> left, IEnumerable<T> right)
+            {
+                return left.Concat(right);
+            }
+        }
     public static class ListTools
     {
+        
         private static readonly Random Random = new Random();
         public static T GetRandomEntry<T>(this IEnumerable<T> list)
         {
