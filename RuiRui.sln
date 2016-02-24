@@ -27,6 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discord.Net.Tests", "Discor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1BE8AF3F-3CFD-433F-A380-D294A4F617C1}"
 	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
 		Discord.Net\global.json = Discord.Net\global.json
 	EndProjectSection
 EndProject
