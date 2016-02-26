@@ -18,8 +18,9 @@ using RuiRuiBot.Services;
 
 namespace RuiRuiBot.Botplugins.Information
 {
-    internal class GithubModule : IModule
-    {
+    internal class GithubModule : IModule {
+        private RuiRui.BotConfig GlobalSettings => _client.RuiService().Config;
+
         private ModuleManager _manager;
         private DiscordClient _client;
         private bool _isRunning;
@@ -31,16 +32,17 @@ namespace RuiRuiBot.Botplugins.Information
             _manager = manager;
             _client = manager.Client;
             _http = _client.HttpService();
-            _settings = _client.SettingService().AddModule<GithubModule, Settings>(manager);
-            
-            _manager.CreateCommands("repos", group =>
+            _settings = _client.SettingService()
+                .AddModule<GithubModule, Settings>(manager);
+
+            manager.CreateCommands("repos", group =>
             {
                 group.MinPermissions((int)Roles.Owner);
 
                 group.CreateCommand("list")
                     .Do(async e =>
                     {
-                        var builder = new StringBuilder();
+                        StringBuilder builder = new StringBuilder();
                         var settings = _settings.Load(e.Server);
                         foreach (var repo in settings.Repos.OrderBy(x => x.Key))
                             builder.AppendLine($"{repo.Key} [{string.Join(",", repo.Value.Branches)}] => {_client.GetChannel(repo.Value.ChannelId)?.Name ?? "Unknown"}");
@@ -53,10 +55,14 @@ namespace RuiRuiBot.Botplugins.Information
                     .Do(async e =>
                     {
                         var settings = _settings.Load(e.Server);
-                        var channel = e.Args[1] != "" ? e.Server.TextChannels.FirstOrDefault(c => c.Name== e.Args[1]) : e.Channel;
+                        Channel channel;
+                        if (e.Args[1] != "")
+                            channel = await _client.FindChannel(e, e.Args[1], ChannelType.Text);
+                        else
+                            channel = e.Channel;
                         if (channel == null) return;
 
-                        var url = FilterUrl(e.Args[0]);
+                        string url = FilterUrl(e.Args[0]);
                         if (settings.AddRepo(url, channel.Id))
                         {
                             await _settings.Save(e.Server.Id, settings);
@@ -71,7 +77,7 @@ namespace RuiRuiBot.Botplugins.Information
                     .Do(async e =>
                     {
                         var settings = _settings.Load(e.Server);
-                        var url = FilterUrl(e.Args[0]);
+                        string url = FilterUrl(e.Args[0]);
                         if (settings.RemoveRepo(url))
                         {
                             await _settings.Save(e.Server.Id, settings);
@@ -87,7 +93,7 @@ namespace RuiRuiBot.Botplugins.Information
                     .Do(async e =>
                     {
                         var settings = _settings.Load(e.Server);
-                        var url = FilterUrl(e.Args[0]);
+                        string url = FilterUrl(e.Args[0]);
                         var repo = settings.Repos[url];
                         if (repo != null)
                         {
@@ -109,7 +115,7 @@ namespace RuiRuiBot.Botplugins.Information
                     .Do(async e =>
                     {
                         var settings = _settings.Load(e.Server);
-                        var url = FilterUrl(e.Args[0]);
+                        string url = FilterUrl(e.Args[0]);
                         var repo = settings.Repos[url];
                         if (repo != null)
                         {
@@ -128,9 +134,11 @@ namespace RuiRuiBot.Botplugins.Information
 
             _client.Ready += (s, e) =>
             {
-                if (_isRunning) return;
-                Task.Run(Run);
-                _isRunning = true;
+                if (!_isRunning)
+                {
+                    Task.Run(Run);
+                    _isRunning = true;
+                }
             };
         }
 
@@ -139,7 +147,7 @@ namespace RuiRuiBot.Botplugins.Information
             try
             {
                 var cancelToken = _client.CancelToken;
-                var builder = new StringBuilder();
+                StringBuilder builder = new StringBuilder();
                 while (!_client.CancelToken.IsCancellationRequested)
                 {
                     foreach (var settings in _settings.AllServers)
@@ -151,20 +159,28 @@ namespace RuiRuiBot.Botplugins.Information
                                 var channel = _client.GetChannel(repo.Value.ChannelId);
                                 if (channel != null && channel.Server.CurrentUser.GetPermissions(channel).SendMessages)
                                 {
-                                    var dateChanged = false;
+                                    bool dateChanged = false;
                                     var since = repo.Value.LastUpdate.UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
-                                    var newDate = repo.Value.LastUpdate;
-                                    var repoAuthor = repo.Key.Split('/')[0];
+                                    DateTimeOffset newDate = repo.Value.LastUpdate;
+                                    string repoAuthor = repo.Key.Split('/')[0];
                                     HttpContent content;
                                     string response;
                                     JToken json;
 
                                     foreach (var branch in repo.Value.Branches)
                                     {
-                                        content = await _http.Send(
-                                            HttpMethod.Get,
-                                            $"https://api.github.com/repos/{repo.Key}/commits?sha={branch}&since={since}",
-                                            authToken: _client.Services.Get<RuiRui>().Config.GitHubToken);
+                                        try
+                                        {
+                                            content = await _http.Send(
+                                                HttpMethod.Get,
+                                                $"https://api.github.com/repos/{repo.Key}/commits?sha={branch}&since={since}",
+                                                authToken: GlobalSettings.GitHubToken);
+                                        }
+                                        catch (HttpException ex) when (ex.StatusCode == HttpStatusCode.Forbidden || ex.StatusCode == HttpStatusCode.NotFound)
+                                        {
+                                            _client.Log.Warning("Github", $"Unable to access {repo.Key}'s {branch} branch.");
+                                            continue;
+                                        }
                                         response = await content.ReadAsStringAsync();
                                         json = JsonConvert.DeserializeObject(response) as JToken;
 
@@ -180,32 +196,42 @@ namespace RuiRuiBot.Botplugins.Information
                                                 var sha = commit.Value<string>("sha")?.Substring(0, 7);
                                                 var msg = commit["commit"].Value<string>("message");
                                                 var date = new DateTimeOffset(commit["commit"]["committer"].Value<DateTime>("date").AddSeconds(1.0), TimeSpan.Zero);
+                                                var author = commit["commit"]["committer"].Value<string>("name");
                                                 //var url = commit.Value<string>("html_url");
 
                                                 _client.Log.Info("Github", $"{repo.Key} {branch} #{sha}");
-                                                
+
                                                 string prefix = $"\n{Format.Code(sha)} ";
-                                                builder.Append($"{prefix}{Format.Escape(msg.Split('\n')[0])}");
+                                                builder.Append($"{prefix}{Format.Escape(msg.Split('\n')[0])} [{author}]");
                                                 //builder.Append($"{prefix}{url}");
-                                                if (date <= newDate) continue;
-                                                newDate = date;
-                                                dateChanged = true;
+                                                if (date > newDate)
+                                                {
+                                                    newDate = date;
+                                                    dateChanged = true;
+                                                }
                                             }
                                             try
                                             {
-                                                await channel.SendBigMessage(builder.ToString());
+                                                await channel.SendMessage(builder.ToString());
                                             }
-                                            catch (HttpException ex) when (ex.StatusCode == HttpStatusCode.Forbidden) { }
+                                            catch (HttpException ex) when (ex.StatusCode == HttpStatusCode.Forbidden || ex.StatusCode == HttpStatusCode.NotFound) { }
                                         }
 
                                         await Task.Delay(1000, cancelToken);
                                     }
 
-                                    content = await _http.Send(
-                                        HttpMethod.Get,
-                                        $"https://api.github.com/" +
-                                        $"repos/{repo.Key}/issues?state=all&sort=updated&since={since}",
-                                        authToken: _client.Services.Get<RuiRui>().Config.GitHubToken);
+                                    try
+                                    {
+                                        content = await _http.Send(
+                                            HttpMethod.Get,
+                                            $"https://api.github.com/repos/{repo.Key}/issues?state=all&sort=updated&since={since}",
+                                            authToken: GlobalSettings.GitHubToken);
+                                    }
+                                    catch
+                                    {
+                                        _client.Log.Warning("Github", $"Unable to access {repo.Key}'s issues.");
+                                        continue;
+                                    }
                                     response = await content.ReadAsStringAsync();
                                     json = JsonConvert.DeserializeObject(response) as JToken;
 
@@ -217,6 +243,7 @@ namespace RuiRuiBot.Botplugins.Information
                                         var createdAt = issue.Value<DateTime>("created_at");
                                         var updatedAt = issue.Value<DateTime>("updated_at");
                                         var closedAt = issue.Value<DateTime?>("closed_at");
+                                        var title = issue.Value<string>("title");
 
                                         string text;
                                         bool skip = false;
@@ -233,20 +260,25 @@ namespace RuiRuiBot.Botplugins.Information
                                             skip = true;
                                             text = $"Updated {type} #{id}";
                                         }
-                                        //_client.Log.Info("Github", $"{repo.Key} {text}");
+                                        _client.Log.Info("Github", $"{repo.Key} {text}");
+                                        if (!string.IsNullOrEmpty(title))
+                                            text += '\n' + title;
+
                                         if (!skip)
                                         {
                                             try
                                             {
-                                                await _client.GetChannel(repo.Value.ChannelId).SendBigMessage($"{Format.Bold(repo.Key)} {text}\n{Format.Escape(url)}");
+                                                await channel.SendMessage($"{Format.Bold(repo.Key)} {text}\n{Format.Escape(url)}");
                                             }
-                                            catch (HttpException ex) when (ex.StatusCode == HttpStatusCode.Forbidden) { }
+                                            catch (HttpException ex) when (ex.StatusCode == HttpStatusCode.Forbidden || ex.StatusCode == HttpStatusCode.NotFound) { }
                                         }
 
                                         var date = new DateTimeOffset(updatedAt.AddSeconds(1.0), TimeSpan.Zero);
-                                        if (date <= newDate) continue;
-                                        newDate = date;
-                                        dateChanged = true;
+                                        if (date > newDate)
+                                        {
+                                            newDate = date;
+                                            dateChanged = true;
+                                        }
                                     }
 
                                     if (dateChanged)
@@ -258,8 +290,7 @@ namespace RuiRuiBot.Botplugins.Information
                             }
                             catch (Exception ex) when (!(ex is TaskCanceledException))
                             {
-                                await _client.SendException(ex);
-                                // ReSharper disable once MethodSupportsCancellation
+                                _client.Log.Error("Github", ex);
                                 await Task.Delay(5000);
                                 continue;
                             }
@@ -267,7 +298,7 @@ namespace RuiRuiBot.Botplugins.Information
                             await Task.Delay(1000, cancelToken); //Wait 1 second between individual requests
                         }
                     }
-                    await Task.Delay(5000 * 60, cancelToken); //Wait 5 minutes between full updates
+                    await Task.Delay(60000, cancelToken); //Wait 1 minute between full updates
                 }
             }
             catch (TaskCanceledException) { }
@@ -296,7 +327,7 @@ namespace RuiRuiBot.Botplugins.Information
             {
                 ChannelId = channelId;
                 LastUpdate = DateTimeOffset.UtcNow;
-                Branches = new[] { "master" };
+                Branches = new string[] { "master" };
             }
 
             public bool AddBranch(string branch)

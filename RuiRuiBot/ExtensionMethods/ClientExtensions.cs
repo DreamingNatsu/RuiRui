@@ -12,6 +12,23 @@ namespace RuiRuiBot.ExtensionMethods
 {
     public static class ClientExtensions
     {
+        public static async Task<Channel> FindChannel(this DiscordClient client, CommandEventArgs e, string name, ChannelType type = null)
+        {
+            var channels = e.Server.FindChannels(name, type);
+
+            int count = channels.Count();
+            if (count == 0)
+            {
+                await client.ReplyError(e, "Channel was not found.");
+                return null;
+            }
+            else if (count > 1)
+            {
+                await client.ReplyError(e, "Multiple channels were found with that name.");
+                return null;
+            }
+            return channels.FirstOrDefault();
+        }
         public static EventHandler<T> TryEvent<T>(this DiscordClient client, EventHandler<T> eventhandle){
             return async (sender, args) =>{
                 try

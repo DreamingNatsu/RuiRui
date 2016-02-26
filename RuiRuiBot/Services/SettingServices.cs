@@ -9,88 +9,117 @@ using Newtonsoft.Json;
 
 namespace RuiRuiBot.Services
 {
-    public class SettingsManager<TSettings>
-        where TSettings : class, new()
+    public class SettingsManager<GlobalSettingsT, SettingsT> : SettingsManager<SettingsT>
+        where GlobalSettingsT : class, new()
+        where SettingsT : class, new()
+    {
+        public GlobalSettingsT Global { get; private set; }
+
+        public SettingsManager(string name)
+            : base(name)
+        {
+        }
+
+        public override void LoadConfigs()
+        {
+            var path = $"{_dir}/global.json";
+            if (File.Exists(path))
+                Global = JsonConvert.DeserializeObject<GlobalSettingsT>(File.ReadAllText(path));
+            else
+                Global = new GlobalSettingsT();
+
+            base.LoadConfigs();
+        }
+
+        public async Task SaveGlobal(GlobalSettingsT settings)
+        {
+            while (true)
+            {
+                try
+                {
+                    using (var fs = new FileStream($"{_dir}/global.json", FileMode.Create, FileAccess.Write, FileShare.None))
+                    using (var writer = new StreamWriter(fs))
+                        await writer.WriteAsync(JsonConvert.SerializeObject(Global));
+                    break;
+                }
+                catch (IOException) //In use
+                {
+                    await Task.Delay(1000);
+                }
+            }
+        }
+    }
+
+    public class SettingsManager<SettingsT>
+        where SettingsT : class, new()
     {
         public string Directory => _dir;
-        private readonly string _dir;
+        protected readonly string _dir;
 
-        public IEnumerable<KeyValuePair<ulong, TSettings>> AllServers => _servers;
-        private ConcurrentDictionary<ulong, TSettings> _servers;
+        public IEnumerable<KeyValuePair<ulong, SettingsT>> AllServers => _servers;
+        private ConcurrentDictionary<ulong, SettingsT> _servers;
 
         public SettingsManager(string name)
         {
             _dir = $"./config/{name}";
             System.IO.Directory.CreateDirectory(_dir);
 
-            LoadServerList();
-        }
-
-        public Task AddServer(ulong id, TSettings settings){
-            return _servers.TryAdd(id, settings) ? SaveServerList() : null;
+            LoadConfigs();
         }
 
         public bool RemoveServer(ulong id)
         {
-            TSettings settings;
-            return _servers.TryRemove(id, out settings);
+            SettingsT settings;
+            if (_servers.TryRemove(id, out settings))
+            {
+                var path = $"{_dir}/{id}.json";
+                if (File.Exists(path))
+                    File.Delete(path);
+                return true;
+            }
+            return false;
         }
 
-        public void LoadServerList()
+        public virtual void LoadConfigs()
         {
-            if (File.Exists($"{_dir}/servers.json"))
-            {
-                var servers = JsonConvert.DeserializeObject<ulong[]>(File.ReadAllText($"{_dir}/servers.json"));
-                _servers = new ConcurrentDictionary<ulong, TSettings>(servers.ToDictionary(x => x, serverId =>
+            var servers = System.IO.Directory.GetFiles(_dir)
+                .Select(x =>
                 {
-                    string path = $"{_dir}/{serverId}.json";
-                    if (File.Exists(path))
-                        return JsonConvert.DeserializeObject<TSettings>(File.ReadAllText(path));
+                    ulong id;
+                    if (ulong.TryParse(Path.GetFileNameWithoutExtension(x), out id))
+                        return id;
                     else
-                        return new TSettings();
-                }));
-            }
-            else
-                _servers = new ConcurrentDictionary<ulong, TSettings>();
-        }
-        public async Task SaveServerList()
-        {
-            if (_servers != null)
-            {
-                while (true)
+                        return (ulong?)null;
+                })
+                .Where(x => x.HasValue)
+                .ToDictionary(x => x.Value, x =>
                 {
-                    try
-                    {
-                        using (var fs = new FileStream($"{_dir}/servers.json", FileMode.Create, FileAccess.Write, FileShare.None))
-                        using (var writer = new StreamWriter(fs))
-                            await writer.WriteAsync(JsonConvert.SerializeObject(_servers.Keys.ToArray()));
-                        break;
-                    }
-                    catch (IOException) //In use
-                    {
-                        await Task.Delay(1000);
-                    }
-                }
-            }
+                    string path = $"{_dir}/{x}.json";
+                    if (File.Exists(path))
+                        return JsonConvert.DeserializeObject<SettingsT>(File.ReadAllText(path));
+                    else
+                        return new SettingsT();
+                });
+
+            _servers = new ConcurrentDictionary<ulong, SettingsT>(servers);
         }
 
-        public TSettings Load(Server server)
+        public SettingsT Load(Server server)
             => Load(server.Id);
-        public TSettings Load(ulong serverId)
+        public SettingsT Load(ulong serverId)
         {
-            TSettings result;
+            SettingsT result;
             if (_servers.TryGetValue(serverId, out result))
                 return result;
             else
-                return new TSettings();
+                return new SettingsT();
         }
 
-        public Task Save(Server server, TSettings settings)
+        public Task Save(Server server, SettingsT settings)
             => Save(server.Id, settings);
-
-        public Task Save(KeyValuePair<ulong, TSettings> pair)
+        public Task Save(KeyValuePair<ulong, SettingsT> pair)
             => Save(pair.Key, pair.Value);
-        public async Task Save(ulong serverId, TSettings settings)
+        public async Task Save(ulong serverId, SettingsT settings)
         {
             _servers[serverId] = settings;
 
@@ -117,8 +146,11 @@ namespace RuiRuiBot.Services
 
         public SettingsManager<SettingsT> AddModule<ModuleT, SettingsT>(ModuleManager manager)
             where SettingsT : class, new()
-        {
-            return new SettingsManager<SettingsT>(manager.Id);
-        }
+            => new SettingsManager<SettingsT>(manager.Id);
+
+        public SettingsManager<GlobalSettingsT, SettingsT> AddModule<ModuleT, GlobalSettingsT, SettingsT>(ModuleManager manager)
+            where GlobalSettingsT : class, new()
+            where SettingsT : class, new()
+            => new SettingsManager<GlobalSettingsT, SettingsT>(manager.Id);
     }
 }
