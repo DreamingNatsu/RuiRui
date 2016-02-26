@@ -43,5 +43,7 @@ namespace RuiRuiConsole
 	    public string GoogleApiKey { get; set; }
         [JsonProperty("anilist")]
 	    public AniListCredentials AniList { get; set; }
+        [JsonProperty("githubtoken")]
+	    public string GitHubToken { get; set; }
 	}
 }

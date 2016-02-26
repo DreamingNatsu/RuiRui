@@ -30,7 +30,11 @@ namespace RuiRuiConsole {
                 DevUserId = DevUserId,
                 MainServerId = 68646348609556480,
                 MainVoiceChannelId = "68646348706025472",
-                GitHubToken = "31a087e6b32d8dab7f74a7c5303d82b80a609572",
+#if DEBUG
+                GitHubToken = "44de1ad9dace0a9655893b1e4439b7687696790d",
+#else
+                GitHubToken = settings.GitHubToken,
+#endif
                 //PLSWORK
                 GoogleApiKey = settings.GoogleApiKey,
                 AniList = settings.AniList
@@ -40,7 +44,7 @@ namespace RuiRuiConsole {
             rui.ExceptionEvent += (sender, eventArgs) => _output.WriteLine(eventArgs.ExceptionObject.ToString());
             rui.Run(async () =>{
                 var client = rui.GetClient();
-                client.Log.Message += (sender, eventArgs) => _output.WriteLine(GetTime().Grey() + $"[{eventArgs.Severity}]".Red() + $"{{{eventArgs.Source.ToString()}}}".Cyan() + $": {eventArgs.Message}");
+                client.Log.Message += (sender, eventArgs) => _output.WriteLine(GetTime().Grey() + $"[{eventArgs.Severity}]".Red() + $"{{{eventArgs.Source.ToString()}}}".Cyan() + $": {eventArgs.Message} {eventArgs.Exception?.Message} {eventArgs.Exception?.InnerException?.Message}");
                 client.MessageReceived += async (sender, eventArgs) => await _output.WriteLine(GetTime().Grey() + $"[{eventArgs.Server?.Name} #{eventArgs.Channel.Name}][{eventArgs.User.Name}]:".Grey()+$" {eventArgs.Message.Text}");
                 await rui.Start();
                 client.CommandService().CommandExecuted += Program_RanCommand;
