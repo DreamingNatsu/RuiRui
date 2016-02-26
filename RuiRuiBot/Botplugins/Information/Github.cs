@@ -165,7 +165,7 @@ namespace RuiRuiBot.Botplugins.Information
                                         content = await _http.Send(
                                             HttpMethod.Get,
                                             $"https://api.github.com/repos/{repo.Key}/commits?sha={branch}&since={since}",
-                                            authToken: "");//GlobalSettings.Github.Token);
+                                            authToken: _client.Services.Get<RuiRui>().Config.GitHubToken);
                                         response = await content.ReadAsStringAsync();
                                         json = JsonConvert.DeserializeObject(response) as JToken;
 

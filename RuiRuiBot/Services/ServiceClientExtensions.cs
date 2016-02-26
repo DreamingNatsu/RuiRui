@@ -21,8 +21,8 @@ namespace RuiRuiBot.Services {
         
 
 
-        public static DbCacheService<DbCtx> DbService(this DiscordClient client) =>
-            GetOrInstallService<DbCacheService<DbCtx>>(client);
+        //public static DbCacheService<DbCtx> DbService(this DiscordClient client) =>
+        //    GetOrInstallService<DbCacheService<DbCtx>>(client);
 
         public static HttpService HttpService(this DiscordClient client) =>
             GetOrInstallService<HttpService>(client);
