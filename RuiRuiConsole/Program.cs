@@ -30,7 +30,7 @@ namespace RuiRuiConsole {
                 DevUserId = DevUserId,
                 MainServerId = 68646348609556480,
                 MainVoiceChannelId = "68646348706025472",
-                GitHubToken = "36139a434edc55a53a1dcfaa8a01c4d590dfef37",
+                GitHubToken = "31a087e6b32d8dab7f74a7c5303d82b80a609572",
                 //PLSWORK
                 GoogleApiKey = settings.GoogleApiKey,
                 AniList = settings.AniList

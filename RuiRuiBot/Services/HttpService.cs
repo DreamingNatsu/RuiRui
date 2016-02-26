@@ -34,7 +34,8 @@ namespace RuiRuiBot.Services
             HttpRequestMessage msg = new HttpRequestMessage(method, path);
 
             if (authToken != null)
-                msg.Headers.Authorization = new AuthenticationHeaderValue("Basic", authToken);
+                msg.Headers.Add("Authorization","token "+authToken);
+                //msg.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
             if (payload != null)
             {
                 string json = JsonConvert.SerializeObject(payload);

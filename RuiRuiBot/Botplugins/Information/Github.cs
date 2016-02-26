@@ -299,7 +299,11 @@ namespace RuiRuiBot.Botplugins.Information
                             await Task.Delay(1000, cancelToken); //Wait 1 second between individual requests
                         }
                     }
+#if DEBUG
+                    await Task.Delay(1000, cancelToken);
+#else
                     await Task.Delay(60000, cancelToken); //Wait 1 minute between full updates
+#endif
                 }
             }
             catch (TaskCanceledException) { }
