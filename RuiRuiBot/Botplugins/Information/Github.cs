@@ -19,6 +19,7 @@ using RuiRuiBot.Services;
 namespace RuiRuiBot.Botplugins.Information
 {
     internal class GithubModule : IModule {
+
         private RuiRui.BotConfig GlobalSettings => _client.RuiService().Config;
 
         private ModuleManager _manager;
