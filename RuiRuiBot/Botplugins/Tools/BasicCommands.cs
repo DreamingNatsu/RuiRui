@@ -18,7 +18,7 @@ namespace RuiRuiBot.Botplugins.Tools {
                     .Description("Changes my profile pic, be kind please.")
                     .Parameter("url")
                     .Do(async m => {
-                        var data = new WebClient().OpenRead((string) m.Args[0]);
+                        var data = new WebClient().OpenRead(m.Args[0]);
 
                         await client.CurrentUser.Edit(rui.Config.Password, avatar: data,
                             avatarType: m.Args[0].EndsWith(".png") ? ImageType.Png : ImageType.Jpeg);

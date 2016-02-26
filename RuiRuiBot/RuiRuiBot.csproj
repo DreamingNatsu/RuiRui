@@ -92,7 +92,6 @@
     <Compile Include="Botplugins\Useless\IsPlaying.cs" />
     <Compile Include="ExtensionMethods\ParamNames.cs" />
     <Compile Include="Rui\RootLevelChecker.cs" />
-    <Compile Include="Services\ConsoleService.cs" />
     <Compile Include="Botplugins\Tools\DateCommands.cs" />
     <Compile Include="Botplugins\Tools\Info.cs" />
     <Compile Include="Botplugins\Tools\Runtime.cs" />
@@ -124,7 +123,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rui\RuiRuiConfig.cs" />
     <Compile Include="Rui\RuiRuiExceptions.cs" />
-    <Compile Include="Services\DbCacheService.cs" />
     <Compile Include="Services\AbstractModuleService.cs" />
     <Compile Include="Services\PluginInvokerService.cs" />
     <Compile Include="Rui\RuiRuiFuncs.cs" />

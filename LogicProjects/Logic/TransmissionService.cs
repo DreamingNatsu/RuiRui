@@ -8,9 +8,9 @@ using Transmission.API.RPC.Entity;
 
 namespace Logic
 {
-    public static class TransmissionService
-    {
-        public static Client GetClient(){
+    public class TransmissionService : IDisposable {
+        private readonly Client _client;
+        public Client GetClient(){
             var i = Settings.Instance;
             return new Client("http://nas.dolha.in:9091/transmission/rpc/",
             //sessionID:"4OBwDGqEPzaM2BPlI4wn6OmNXD5DRYIEXy3Av0ql5ro6Bqo5",
@@ -20,9 +20,13 @@ namespace Logic
         }
 
 
-        public static List<TorrentInfo> GetTorrents(int amount = 0)
+        public TransmissionService(){
+            _client = GetClient();
+        }
+
+        public List<TorrentInfo> GetTorrents(int amount = 0)
         {
-            var transmission = GetClient();
+            
             //var sessionInfo = transmission.GetSessionInformation();
             //var par = new[]
             //{
@@ -37,7 +41,7 @@ namespace Logic
             TransmissionTorrents allTorrents;
             try
             {
-                allTorrents = transmission.GetTorrents(par, null);
+                allTorrents = _client.GetTorrents(par, null);
             }
             catch (Exception)
             {
@@ -49,11 +53,14 @@ namespace Logic
             return (amount == 0 ? tz : tz.Take(amount)).ToList();
         }
 
-        public static void CreateTorrent(string url)
-        {
-            var transmission = GetClient();
-            transmission.AddTorrent(new NewTorrent() {Filename = url, DownloadDirectory = "/mnt/HD_a2/Infinity/Downloads"});
-            var v = transmission.GetSessionStatistic();
+        public void CreateTorrent(string url){
+            _client.AddTorrent(new NewTorrent() {Filename = url, DownloadDirectory = "/mnt/HD_a2/Infinity/Downloads"});
+            _client.GetSessionStatistic();
+
+        }
+
+        public void Dispose(){
+        
         }
     }
 }

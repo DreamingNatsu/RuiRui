@@ -42,8 +42,8 @@ namespace RuiRuiBot.Services {
             return client;
         }
 
-        public static ConsoleService ConsoleService(this DiscordClient client, bool isRequired = true) =>
-            client.Services.Get<ConsoleService>();
+        //public static ConsoleService ConsoleService(this DiscordClient client, bool isRequired = true) =>
+        //    client.Services.Get<ConsoleService>();
 
         public static RuiRui RuiService(this DiscordClient client, bool isRequired = true) =>
             client.Services.FirstOrDefault(s => s is RuiRui) as RuiRui;

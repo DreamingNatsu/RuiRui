@@ -11,7 +11,7 @@ namespace RuiRuiBot.Rui
             public ulong DevUserId { get; set; }
             public ulong MainServerId { get; set; }
             public string MainVoiceChannelId { get; set; }
-            public string GitHubToken { get; set; }
+            public string GitHubToken { get; set; } = "";
             public char CommandChar { get; set; } = '/';
             public string BotBanGroup { get; set; } = "BotBan";
             public string ModeratorGroup { get; set; } = "Triumvirate";

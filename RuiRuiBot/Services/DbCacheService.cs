@@ -12,7 +12,7 @@ using RuiRuiBot.Rui;
 namespace RuiRuiBot.Services
 {
     /// <summary>
-    /// an in memory cache of EntityFramework database tables
+    /// an in memory cache of EntityFramework database tables AND THIS SHIT IS FUCKING UNNESSECARY HAH
     /// </summary>
     public class DbCacheService<TDbCtx> : IService where TDbCtx : IDisposable, IObjectContextAdapter, new() {
         private readonly ConcurrentDictionary<Type, List<object>> _dbSets;

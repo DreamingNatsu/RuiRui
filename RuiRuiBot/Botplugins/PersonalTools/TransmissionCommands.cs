@@ -28,65 +28,63 @@ namespace RuiRuiBot.Botplugins.PersonalTools {
 
         private void AddCommands(){
             _manager.CreateCommands(bot =>{
-                PermissionLevelExtensions.MinPermissions((CommandGroupBuilder) bot, (int) Roles.Owner);
+                bot.MinPermissions((int)Roles.Owner);
 
 
-                Func<CommandEventArgs, RssTorrentManager, string> updateRss = (m, rss) =>{
-                    rss.UpdateConfig();
-                    return "updating RSS";
-                };
                 bot.CreateCommand("updaterssconfig")
                     .Description("Updates the config file to match the rsslink database entries")
-                    .Do(updateRss);
+                    .Do<RssTorrentManager>((m, rss) =>
+                    {
+                        rss.UpdateConfig();
+                        return "updating RSS";
+                    });
 
 
-                Func<CommandEventArgs, RssTorrentManager, string> addrss = (m, rss) =>{
-                    rss.AddRssLink(m.GetArg("link"), m.GetArg("location"));
-                    return $"{m.GetArg("link")} added";
-                };
                 bot.CreateCommand("addrss")
                     .Parameter("link").Parameter("location")
                     .Description("adds an RSS link to the database")
-                    .Do(addrss);
+                    .Do<RssTorrentManager>((m, rss) =>
+                    {
+                        rss.AddRssLink(m.GetArg("link"), m.GetArg("location"));
+                        return $"{m.GetArg("link")} added";
+                    });
 
 
-                Func<CommandEventArgs, RssTorrentManager, string> delrss = (m, rss) => {
-                    rss.DeleteRssLink(m.GetArg("link"));
-                    return $"{m.GetArg("link")} deleted";
-                };
                 bot.CreateCommand("delrss")
                     .Parameter("link")
                     .Description("deletes an RSS link from the database")
-                    .Do(delrss);
+                    .Do<RssTorrentManager>((m, rss) =>
+                    {
+                        rss.DeleteRssLink(m.GetArg("link"));
+                        return $"{m.GetArg("link")} deleted";
+                    });
 
 
-                Func<CommandEventArgs, RssTorrentManager, IEnumerable<string>> listrss =
-                    (m, rss) => { return rss.GetRssList().Select(r => "[" + r.RssUrl + "] " + r.Path + "\n"); };
                 bot.CreateCommand("listrss")
                     .Description("adds an RSS link to the database")
-                    .Do(listrss);
+                    .Do<RssTorrentManager>((m, rss) => { return rss.GetRssList().Select(r => "[" + r.RssUrl + "] " + r.Path + "\n"); });
 
 
-                Func<CommandEventArgs, IEnumerable<string>> getTorrents = m =>{
-                    var arg = m.GetArg("amount");
-                    var tz = TransmissionService.GetTorrents(!string.IsNullOrWhiteSpace(arg)?int.Parse(arg):5);
-                    var message = tz.Select(ti => $"{ti.Name} [{FileExplorerTools.BytesToString(ti.SizeWhenDone)}] [{ti.PercentDone*100}%]\n");
-                    return message;
-                };
                 bot.CreateCommand("torrents")
                     .Parameter("amount", ParameterType.Optional)
                     .Description("Gets the last X or 5 torrents from the torrent client")
-                    .Do(getTorrents);
+                    .Do<TransmissionService>((m,tmz) =>
+                    {
+                        var arg = m.GetArg("amount");
+                        var tz = tmz.GetTorrents(!string.IsNullOrWhiteSpace(arg) ? int.Parse(arg) : 5);
+                        var message = tz.Select(ti => $"{ti.Name} [{FileExplorerTools.BytesToString(ti.SizeWhenDone)}] [{ti.PercentDone * 100}%]\n");
+                        return message;
+                    });
 
 
-                Func<CommandEventArgs, string> addTorrent = m =>{
-                    TransmissionService.CreateTorrent(m.Args[0]);
-                    return "I'll try to add that";
-                };
                 bot.CreateCommand("addtorrent")
                     .Parameter("torrentlink")
                     .Description("Adds a torrent to the torrent client")
-                    .Do(addTorrent);
+                    .Do<TransmissionService>((m,tms) =>
+                    {
+                        tms.CreateTorrent(m.Args[0]);
+                        return "I'll try to add that";
+                    });
 
             });
         }
@@ -109,21 +107,24 @@ namespace RuiRuiBot.Botplugins.PersonalTools {
 
         private async void CheckTorrents(){
             try {
-                var time = TimeCheck();
-                var torrents = TransmissionService.GetTorrents(50);
-                //var donedone = torrents.Where(t=>t.PercentDone*100 == 100);
-                var done = torrents.Where(t =>{
-                    var date = new DateTime();
-                    date = date.AddYears(1969).AddSeconds(t.AddedDate);
-                    return date > time;
-                }).ToList();
-                if (!done.Any()) return;
-                var message = "Torrent" + (done.Count > 1 ? "s" : "") + " added:\n";
-                var array = new List<string>{message};
-                array.AddRange(done.Select(ti => $"{ti.Name} " +
-                                                 $"[{FileExplorerTools.BytesToString(ti.SizeWhenDone)}] " +
-                                                 $"[{ti.PercentDone*100}%]\n"));
-                await _manager.Client.SendDev(array);
+                using (var tmz = new TransmissionService()) {
+                    var time = TimeCheck();
+                    var torrents = tmz.GetTorrents(50);
+                    //var donedone = torrents.Where(t=>t.PercentDone*100 == 100);
+                    var done = torrents.Where(t =>{
+                        var date = new DateTime();
+                        date = date.AddYears(1969).AddSeconds(t.AddedDate);
+                        return date > time;
+                    }).ToList();
+                    if (!done.Any()) return;
+                    var message = "Torrent" + (done.Count > 1 ? "s" : "") + " added:\n";
+                    var array = new List<string>{message};
+                    array.AddRange(done.Select(ti => $"{ti.Name} " +
+                                                     $"[{FileExplorerTools.BytesToString(ti.SizeWhenDone)}] " +
+                                                     $"[{ti.PercentDone*100}%]\n"));
+                    await _manager.Client.SendDev(array);
+                }
+                
             }
             catch (Exception ex) {
                 await _manager.Client.SendException(ex);

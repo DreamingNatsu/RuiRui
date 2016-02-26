@@ -194,7 +194,7 @@ namespace RuiRuiBot.Botplugins.Information
                                             }
                                             try
                                             {
-                                                await channel.SendMessage(builder.ToString());
+                                                await channel.SendBigMessage(builder.ToString());
                                             }
                                             catch (HttpException ex) when (ex.StatusCode == HttpStatusCode.Forbidden) { }
                                         }
@@ -204,8 +204,9 @@ namespace RuiRuiBot.Botplugins.Information
 
                                     content = await _http.Send(
                                         HttpMethod.Get,
-                                        $"https://api.github.com/repos/{repo.Key}/issues?state=all&sort=updated&since={since}",
-                                        authToken: _client.Services.Get<Rui.RuiRui>().Config.GitHubToken);
+                                        $"https://api.github.com/" +
+                                        $"repos/{repo.Key}/issues?state=all&sort=updated&since={since}",
+                                        authToken: _client.Services.Get<RuiRui>().Config.GitHubToken);
                                     response = await content.ReadAsStringAsync();
                                     json = JsonConvert.DeserializeObject(response) as JToken;
 
@@ -238,7 +239,7 @@ namespace RuiRuiBot.Botplugins.Information
                                         {
                                             try
                                             {
-                                                await _client.GetChannel(repo.Value.ChannelId).SendMessage($"{Format.Bold(repo.Key)} {text}\n{Format.Escape(url)}");
+                                                await _client.GetChannel(repo.Value.ChannelId).SendBigMessage($"{Format.Bold(repo.Key)} {text}\n{Format.Escape(url)}");
                                             }
                                             catch (HttpException ex) when (ex.StatusCode == HttpStatusCode.Forbidden) { }
                                         }

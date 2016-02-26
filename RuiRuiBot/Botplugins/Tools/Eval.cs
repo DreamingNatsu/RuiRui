@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿/*
+using System.Dynamic;
 using Discord;
 using Discord.Commands;
 using Discord.Commands.Permissions.Levels;
@@ -6,7 +7,7 @@ using Discord.Modules;
 using Microsoft.CSharp.RuntimeBinder;
 using RuiRuiBot.ExtensionMethods;
 using RuiRuiBot.Rui;
-/*
+
 namespace RuiRuiBot.Botplugins.Tools {
     public class Eval //: IModule
         //todo: fix this piece of shit

@@ -18,8 +18,8 @@ namespace RuiRuiBot.Botplugins.Tools {
 
                 cfg.CreateCommand("info")
                     .Alias("about")
-                    .Do(async e =>{
-                        await e.Channel.SendMessage(
+                    .Do( e =>{
+                        return
                             $"{Format.Bold("Info")}\n" +
                             "- Author: Goobles \n" +
                             $"- Library: {DiscordConfig.LibName} ({DiscordConfig.LibVersion})\n" +
@@ -33,7 +33,7 @@ namespace RuiRuiBot.Botplugins.Tools {
                             $"- Channels: {client.Servers.Sum(x => x.AllChannels.Count())}\n" +
                             $"- Users: {client.Servers.Sum(x => x.Users.Count())}\n" +
                             $"- BaseDir: {AppDomain.CurrentDomain.BaseDirectory}\n"
-                            );
+                            ;
                     });
             });
         }
