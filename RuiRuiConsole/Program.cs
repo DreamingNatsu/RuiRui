@@ -31,6 +31,7 @@ namespace RuiRuiConsole {
                 MainServerId = 68646348609556480,
                 MainVoiceChannelId = "68646348706025472",
                 GitHubToken = "36139a434edc55a53a1dcfaa8a01c4d590dfef37",
+                //PLSWORK
                 GoogleApiKey = settings.GoogleApiKey,
                 AniList = settings.AniList
             });
