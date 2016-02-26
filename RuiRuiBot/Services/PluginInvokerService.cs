@@ -37,18 +37,20 @@ namespace RuiRuiBot.Services
         private void InitPlugins(){
             var moduleinstances = (modules == null || !modules.Any())?AllModules:modules;
 
-            moduleinstances.ForEach(async imp =>
+            var enumerable = moduleinstances as IModule[] ?? moduleinstances.ToArray();
+            enumerable.ForEach(async imp =>
             {
                 var name = imp.GetType().Name;
                 try {
                     ModuleService.Add(imp, name, ModuleFilter.None);
-                    ApplyFilters(imp);
+                    //ApplyFilters(imp);
                 }
                 catch (Exception e) {
                     await _client.SendException(e);
                 }
-
             });
+
+            _client.Ready += (sender, args) => { enumerable.ForEach(imp => ApplyFilters(imp)); };
         }
 
         private void ApplyFilters(IModule module,DbCtx altdb = null){
@@ -270,9 +272,15 @@ namespace RuiRuiBot.Services
         }
 
         public void Install(DiscordClient client){
-            if (client.Services.Get<ModuleService>()==null) throw new InvalidOperationException("ModuleService needs to be added to the client first before using the PluginInvoker.");
+            if (client.Services.Get<ModuleService>()==null) throw new InvalidOperationException("ModuleService needs to be added to the client first before using the PluginInvokerService.");
+            if (client.State != ConnectionState.Disconnected) throw new InvalidOperationException("DiscordClient must not be connected before adding the PluginInvokerService.");
             _client = client;
             InitPlugins();
+        }
+
+        private void Client_Ready(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 

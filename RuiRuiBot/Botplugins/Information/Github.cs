@@ -129,8 +129,7 @@ namespace RuiRuiBot.Botplugins.Information
             _client.Ready += (s, e) =>
             {
                 if (_isRunning) return;
-                // ReSharper disable once RedundantCast
-                Task.Run((Func<Task>) (Run));
+                Task.Run(Run);
                 _isRunning = true;
             };
         }

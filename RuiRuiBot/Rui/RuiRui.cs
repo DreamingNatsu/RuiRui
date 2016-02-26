@@ -105,9 +105,10 @@ namespace RuiRuiBot.Rui {
             //    });
             //_client.AddService(commandService);
             _client.CommandService().Root.AddCheck(new RootLevelChecker(_client, 0));
+            _client.PluginInvokerService();
             await Login();
 
-            _client.PluginInvokerService();
+            
         }
 
     }
